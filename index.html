@@ -69,26 +69,42 @@
         .catch((err) => console.log('註冊失敗:', err));
     }
 
-    window.OneSignal = window.OneSignal || [];
-    OneSignal.push(function() {
-      OneSignal.init({
-        appId: "e6add4c0-fd20-4fe3-8b61-a63e88c090d0", // 替換成你的 OneSignal App ID
-        /*safari_web_id: "如果你有申請Safari專用ID可填",*/
-        notifyButton: { enable: true } // 右下角會出現一個鈴鐺小圖示供訂閱
+  window.OneSignal = window.OneSignal || [];
+  
+  // 使用 OneSignal.push 確保 SDK 載入完成後才執行內部邏輯
+  OneSignal.push(async function() {
+    
+    // 防禦性檢查：確保通知 namespace 存在，避免閃退
+    if (!OneSignal.init) {
+      console.error("OneSignal SDK 尚未完全載入");
+      return;
+    }
+
+    try {
+      await OneSignal.init({
+        appId: "e6add4c0-fd20-4fe3-8b61-a63e88c090d0", 
+        notifyButton: { enable: true },
+        // 強制指定 Service Worker 的路徑與註冊範圍，確保能順利讀取到 sw.js
+        serviceWorkerPath: "sw.js",
+        serviceWorkerParam: { scope: "/" }
       });
-      
-      // 當使用者成功訂閱推播時，取得他的 OneSignal Subscription ID
+      console.log("OneSignal 初始化成功！");
+
+      // 監聽訂閱狀態改變
       OneSignal.User.PushSubscription.addEventListener("change", function(event) {
-        if (event.current.id) {
+        if (event.current && event.current.id) {
           const userId = event.current.id;
           console.log("取得用戶推播ID:", userId);
           
-          // 【關鍵】將這個用戶 ID 傳送給 iframe 內部的 GAS 後端儲存
           const gasFrame = document.getElementById("gasFrame").contentWindow;
           gasFrame.postMessage({ type: "PUSH_ID", id: userId }, "*");
         }
       });
-    });
+
+    } catch (error) {
+      console.error("OneSignal 初始化發生錯誤:", error);
+    }
+  });
   </script>
 </body>
 </html>
