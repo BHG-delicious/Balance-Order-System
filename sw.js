@@ -1,4 +1,6 @@
-const CACHE_NAME = 'Balance-Order-System-v2.6.0';
+importScripts('https://onesignal.com');
+
+const CACHE_NAME = 'Balance-Order-System-v2.6.1';
 const ASSETS = ['index.html', 'manifest.json'];
 
 self.addEventListener('install', (e) => {
