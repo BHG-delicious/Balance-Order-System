@@ -1,4 +1,4 @@
-importScripts('https://onesignal.com');
+importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
 
 const CACHE_NAME = 'Balance-Order-System-v2.6.1';
 const ASSETS = ['index.html', 'manifest.json'];
