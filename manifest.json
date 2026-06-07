@@ -1,0 +1,20 @@
+{
+  "name": "大家政便當廠-儲值點餐系統",
+  "short_name": "儲值點餐系統",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/HfPpKRrV/BHG-logo1-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "https://i.ibb.co/3GNps25/BHG-logo1-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000"
+}
