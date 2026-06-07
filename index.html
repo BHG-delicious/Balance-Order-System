@@ -16,6 +16,16 @@
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="manifest" href="manifest.json">
 
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "e6add4c0-fd20-4fe3-8b61-a63e88c090d0",
+      });
+    });
+  </script> 
+
   <meta name="google-adsense-account" content="ca-pub-4906582502981364">
   <meta name="google-site-verification" content="STfcowb6CJ0DyNTcVMfEsVNjxrRAVv9TeYKViCCEHws" />
 
@@ -62,8 +72,8 @@
     window.OneSignal = window.OneSignal || [];
     OneSignal.push(function() {
       OneSignal.init({
-        appId: "你的_ONESIGNAL_APP_ID", // 替換成你的 OneSignal App ID
-        safari_web_id: "如果你有申請Safari專用ID可填",
+        appId: "e6add4c0-fd20-4fe3-8b61-a63e88c090d0", // 替換成你的 OneSignal App ID
+        /*safari_web_id: "如果你有申請Safari專用ID可填",*/
         notifyButton: { enable: true } // 右下角會出現一個鈴鐺小圖示供訂閱
       });
       
