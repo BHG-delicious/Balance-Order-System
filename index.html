@@ -58,6 +58,27 @@
         .then(() => console.log('PWA Service Worker 註冊成功'))
         .catch((err) => console.log('註冊失敗:', err));
     }
+
+    window.OneSignal = window.OneSignal || [];
+    OneSignal.push(function() {
+      OneSignal.init({
+        appId: "你的_ONESIGNAL_APP_ID", // 替換成你的 OneSignal App ID
+        safari_web_id: "如果你有申請Safari專用ID可填",
+        notifyButton: { enable: true } // 右下角會出現一個鈴鐺小圖示供訂閱
+      });
+      
+      // 當使用者成功訂閱推播時，取得他的 OneSignal Subscription ID
+      OneSignal.User.PushSubscription.addEventListener("change", function(event) {
+        if (event.current.id) {
+          const userId = event.current.id;
+          console.log("取得用戶推播ID:", userId);
+          
+          // 【關鍵】將這個用戶 ID 傳送給 iframe 內部的 GAS 後端儲存
+          const gasFrame = document.getElementById("gasFrame").contentWindow;
+          gasFrame.postMessage({ type: "PUSH_ID", id: userId }, "*");
+        }
+      });
+    });
   </script>
 </body>
 </html>
