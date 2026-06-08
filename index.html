@@ -52,108 +52,35 @@
   <!-- End Google Tag Manager (noscript) -->
 
   <!-- 修正點 1：替 iframe 加上 id="gasFrame"，否則下方的 postMessage 會找不到目標而報錯 -->
-  <iframe id="gasFrame" style="width:100%; height:100%; border:none;"></iframe>
+  <iframe id="gasFrame" src="https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec"></iframe>
 
   <script>
     // GAS 的實際部署網址
     const baseGasUrl = "https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec";
-    const gasFrame = document.getElementById('gasFrame');
-    
-    // 記錄目前的頁面狀態
-    let currentPage = 'balance';
-    let lastUrl = '';
 
-    // --- 核心功能：透過 URL 參數傳遞資訊給 GAS ---
-    function updateGasIframeUrl() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const page = urlParams.get('page') || currentPage;
-      const password = urlParams.get('password');
-      
-      // 建構新的 URL
-      let newUrl = baseGasUrl;
-      const params = [];
-      
-      if (page) params.push(`page=${encodeURIComponent(page)}`);
-      if (password) params.push(`password=${encodeURIComponent(password)}`);
-      
-      if (params.length > 0) {
-        newUrl += '?' + params.join('&');
-      }
-      
-      // 只在 URL 改變時才更新 iframe（避免無限迴圈）
-      if (newUrl !== lastUrl) {
-        lastUrl = newUrl;
-        console.log('🔄 [外層] 更新 iframe URL:', newUrl);
-        gasFrame.src = newUrl;
-      }
-    }
-    
-    // --- 監聽來自 GAS 的頁面變化（透過 URL hash 或 頁面標題）---
-    // 由於無法使用 postMessage，我們改用輪詢檢查 iframe 的 URL 變化
-    let lastCheckedUrl = '';
-    
-    function checkIframeUrlChange() {
-      if (!gasFrame || !gasFrame.contentWindow) return;
-      
-      try {
-        // 嘗試讀取 iframe 的當前 URL（只有在同源時才能讀取，這裡無法讀取）
-        // 替代方案：在 GAS 端透過 document.title 傳遞訊息
-        const iframeTitle = gasFrame.contentDocument?.title;
-        if (iframeTitle && iframeTitle.startsWith('PAGE:')) {
-          const newPage = iframeTitle.substring(5);
-          if (newPage !== currentPage) {
-            currentPage = newPage;
-            // 更新外層 URL（不重新載入頁面）
-            const newUrl = new URL(window.location.href);
-            newUrl.searchParams.set('page', currentPage);
-            window.history.pushState({}, '', newUrl);
-            console.log('🔄 [外層] 偵測到頁面變化，更新 URL:', newUrl);
-          }
-        }
-      } catch(e) {
-        // 跨域無法讀取，這是正常的
-      }
-    }
-    
-    // 每 500ms 檢查一次 iframe 的變化
-    setInterval(checkIframeUrlChange, 500);
-    
-    // --- 監聽瀏覽器的前進/後退按鈕 ---
-    window.addEventListener('popstate', () => {
-      console.log('🔙 [外層] 偵測到瀏覽器導航');
-      updateGasIframeUrl();
-    });
-    
-    // --- 初始化 iframe ---
-    updateGasIframeUrl();
-
-    // --- 5. 原有的 OneSignal 初始化邏輯 (保持不變) ---
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
       try {
         await OneSignal.init({
           appId: "e6add4c0-fd20-4fe3-8b61-a63e88c090d0",
           notifyButton: { enable: true },
-          serviceWorkerPath: "Balance-Order-System/OneSignalSDKWorker.js",
-          serviceWorkerParam: { scope: "/Balance-Order-System/" }
+          serviceWorkerPath: "Balance-Order-System/OneSignalSDKWorker.js", 
+          serviceWorkerParam: { scope: "/Balance-Order-System/" } 
         });
         console.log("OneSignal 初始化成功！");
 
+        // 1. 初始化時檢查是否已有訂閱 ID
         setTimeout(async () => {
           const pushId = OneSignal.User.PushSubscription.id;
           if (pushId) {
-            // 將 pushId 透過 message 傳給 GAS，這部分可整合到 sendUrlParamsToGas 一併處理
-            if (gasFrame && gasFrame.contentWindow) {
-              gasFrame.contentWindow.postMessage({ type: 'PUSH_ID', id: pushId }, '*');
-            }
+            handleGasUrlUpdate(pushId);
           }
         }, 1500);
 
+        // 2. 監聽後續訂閱狀態改變
         OneSignal.User.PushSubscription.addEventListener("change", function(event) {
           if (event.current && event.current.id) {
-            if (gasFrame && gasFrame.contentWindow) {
-              gasFrame.contentWindow.postMessage({ type: 'PUSH_ID', id: event.current.id }, '*');
-            }
+            handleGasUrlUpdate(event.current.id);
           }
         });
 
@@ -161,8 +88,23 @@
         console.error("OneSignal 初始化發生錯誤:", error);
       }
     });
-  </script>
 
+    // 【關鍵機制】檢查當前 iframe 網址，若沒有帶有該用戶的推播 ID，就將其更新
+    function handleGasUrlUpdate(userId) {
+      console.log("當前用戶推播ID:", userId);
+      const gasFrame = document.getElementById("gasFrame");
+      if (!gasFrame) return;
+
+      // 構造帶有推播 ID 的新 GAS 網址
+      const targetUrl = baseGasUrl + "?pushId=" + userId;
+
+      // 如果 iframe 當前的網址還沒有這個參數，就幫它轉跳導向（首次訂閱或新用戶時會觸發一次）
+      if (gasFrame.src !== targetUrl) {
+        console.log("正在將推播 ID 透過網址參數帶入 GAS...");
+        gasFrame.src = targetUrl;
+      }
+    }
+  </script>
 
 </body>
 </html>
