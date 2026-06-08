@@ -57,6 +57,9 @@
   <script>
     const baseGasUrl = "https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec";
     const gasFrame = document.getElementById('gasFrame');
+    
+    // 儲存 GAS 的實際 origin（用於後續驗證）
+    let gasOrigin = '';
 
     // --- 1. 核心功能：解析 URL 並發送參數給 GAS iframe ---
     function sendUrlParamsToGas() {
@@ -69,7 +72,7 @@
       const urlParams = new URLSearchParams(window.location.search);
       const page = urlParams.get('page');
       const password = urlParams.get('password');
-      const pushId = urlParams.get('pushId'); // 一併處理推播 ID
+      const pushId = urlParams.get('pushId');
 
       const message = {
         type: 'URL_PARAMS',
@@ -77,18 +80,26 @@
       };
 
       console.log('📤 [外層] 發送參數給 GAS:', message);
-      gasFrame.contentWindow.postMessage(message, '*'); // '*' 在您這個案例中是安全的
+      // 關鍵：使用 '*' 作為 targetOrigin，允許跨域發送
+      gasFrame.contentWindow.postMessage(message, '*');
     }
 
     // --- 2. 監聽來自 GAS 的導航請求，更新外層 URL ---
     window.addEventListener('message', (event) => {
-      // 可以加入簡單的來源驗證，但 GAS 來源會變，開發時可先放寬
+      // 記錄 GAS 的 origin（第一次收到訊息時）
+      if (!gasOrigin && event.origin.includes('script.googleusercontent.com')) {
+        gasOrigin = event.origin;
+        console.log('✅ [外層] 記錄 GAS origin:', gasOrigin);
+      }
+
+      // 可以放寬驗證，或信任所有來自 GAS 的訊息
+      // 由於無法預測 GAS 的確切 origin，建議先信任所有來源
+      
       if (event.data && event.data.type === 'UPDATE_URL') {
         const newPage = event.data.page;
         if (newPage) {
           const newUrl = new URL(window.location.href);
           newUrl.searchParams.set('page', newPage);
-          // 使用 pushState 更新外層 URL，同時生成一筆瀏覽歷史記錄
           window.history.pushState({}, '', newUrl);
           console.log(`🔄 [外層] URL 已更新為: ${newUrl}`);
         }
@@ -105,7 +116,10 @@
     if (gasFrame) {
       gasFrame.addEventListener('load', () => {
         console.log('✅ [外層] iframe 載入完成，發送初始參數');
-        sendUrlParamsToGas();
+        // 延遲一點確保 GAS 端的 listener 已就緒
+        setTimeout(() => {
+          sendUrlParamsToGas();
+        }, 500);
       });
     } else {
       console.error('❌ 找不到 iframe 元素');
