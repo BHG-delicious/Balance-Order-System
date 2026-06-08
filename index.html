@@ -85,6 +85,9 @@
 
       } catch (error) {
         console.error("OneSignal 初始化發生錯誤:", error);
+        if (error.message && error.message.includes("Permission blocked")) {
+          console.warn("提示：使用者已封鎖通知權限。請點擊網址旁的鎖頭圖示手動開啟權限。");
+        }
       }
     });
 
