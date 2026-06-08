@@ -52,78 +52,80 @@
   <!-- End Google Tag Manager (noscript) -->
 
   <!-- 修正點 1：替 iframe 加上 id="gasFrame"，否則下方的 postMessage 會找不到目標而報錯 -->
-  <iframe id="gasFrame" src="https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec"></iframe>
+  <iframe id="gasFrame" style="width:100%; height:100%; border:none;"></iframe>
 
   <script>
+    // GAS 的實際部署網址
     const baseGasUrl = "https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec";
     const gasFrame = document.getElementById('gasFrame');
     
-    // 儲存 GAS 的實際 origin（用於後續驗證）
-    let gasOrigin = '';
+    // 記錄目前的頁面狀態
+    let currentPage = 'balance';
+    let lastUrl = '';
 
-    // --- 1. 核心功能：解析 URL 並發送參數給 GAS iframe ---
-    function sendUrlParamsToGas() {
-      if (!gasFrame || !gasFrame.contentWindow) {
-        console.warn("⚠️ iframe 尚未載入，稍後重試...");
-        return;
-      }
-
-      // 解析外層瀏覽器的 URL
+    // --- 核心功能：透過 URL 參數傳遞資訊給 GAS ---
+    function updateGasIframeUrl() {
       const urlParams = new URLSearchParams(window.location.search);
-      const page = urlParams.get('page');
+      const page = urlParams.get('page') || currentPage;
       const password = urlParams.get('password');
-      const pushId = urlParams.get('pushId');
-
-      const message = {
-        type: 'URL_PARAMS',
-        data: { page, password, pushId }
-      };
-
-      console.log('📤 [外層] 發送參數給 GAS:', message);
-      // 關鍵：使用 '*' 作為 targetOrigin，允許跨域發送
-      gasFrame.contentWindow.postMessage(message, '*');
-    }
-
-    // --- 2. 監聽來自 GAS 的導航請求，更新外層 URL ---
-    window.addEventListener('message', (event) => {
-      // 記錄 GAS 的 origin（第一次收到訊息時）
-      if (!gasOrigin && event.origin.includes('script.googleusercontent.com')) {
-        gasOrigin = event.origin;
-        console.log('✅ [外層] 記錄 GAS origin:', gasOrigin);
-      }
-
-      // 可以放寬驗證，或信任所有來自 GAS 的訊息
-      // 由於無法預測 GAS 的確切 origin，建議先信任所有來源
       
-      if (event.data && event.data.type === 'UPDATE_URL') {
-        const newPage = event.data.page;
-        if (newPage) {
-          const newUrl = new URL(window.location.href);
-          newUrl.searchParams.set('page', newPage);
-          window.history.pushState({}, '', newUrl);
-          console.log(`🔄 [外層] URL 已更新為: ${newUrl}`);
-        }
+      // 建構新的 URL
+      let newUrl = baseGasUrl;
+      const params = [];
+      
+      if (page) params.push(`page=${encodeURIComponent(page)}`);
+      if (password) params.push(`password=${encodeURIComponent(password)}`);
+      
+      if (params.length > 0) {
+        newUrl += '?' + params.join('&');
       }
-    });
-
-    // --- 3. 監聽瀏覽器的前進/後退按鈕 (popstate) ---
-    window.addEventListener('popstate', () => {
-      console.log('🔙 [外層] 偵測到瀏覽器導航，重新發送參數');
-      sendUrlParamsToGas();
-    });
-
-    // --- 4. 等待 iframe 載入完成後發送初次參數 ---
-    if (gasFrame) {
-      gasFrame.addEventListener('load', () => {
-        console.log('✅ [外層] iframe 載入完成，發送初始參數');
-        // 延遲一點確保 GAS 端的 listener 已就緒
-        setTimeout(() => {
-          sendUrlParamsToGas();
-        }, 500);
-      });
-    } else {
-      console.error('❌ 找不到 iframe 元素');
+      
+      // 只在 URL 改變時才更新 iframe（避免無限迴圈）
+      if (newUrl !== lastUrl) {
+        lastUrl = newUrl;
+        console.log('🔄 [外層] 更新 iframe URL:', newUrl);
+        gasFrame.src = newUrl;
+      }
     }
+    
+    // --- 監聽來自 GAS 的頁面變化（透過 URL hash 或 頁面標題）---
+    // 由於無法使用 postMessage，我們改用輪詢檢查 iframe 的 URL 變化
+    let lastCheckedUrl = '';
+    
+    function checkIframeUrlChange() {
+      if (!gasFrame || !gasFrame.contentWindow) return;
+      
+      try {
+        // 嘗試讀取 iframe 的當前 URL（只有在同源時才能讀取，這裡無法讀取）
+        // 替代方案：在 GAS 端透過 document.title 傳遞訊息
+        const iframeTitle = gasFrame.contentDocument?.title;
+        if (iframeTitle && iframeTitle.startsWith('PAGE:')) {
+          const newPage = iframeTitle.substring(5);
+          if (newPage !== currentPage) {
+            currentPage = newPage;
+            // 更新外層 URL（不重新載入頁面）
+            const newUrl = new URL(window.location.href);
+            newUrl.searchParams.set('page', currentPage);
+            window.history.pushState({}, '', newUrl);
+            console.log('🔄 [外層] 偵測到頁面變化，更新 URL:', newUrl);
+          }
+        }
+      } catch(e) {
+        // 跨域無法讀取，這是正常的
+      }
+    }
+    
+    // 每 500ms 檢查一次 iframe 的變化
+    setInterval(checkIframeUrlChange, 500);
+    
+    // --- 監聽瀏覽器的前進/後退按鈕 ---
+    window.addEventListener('popstate', () => {
+      console.log('🔙 [外層] 偵測到瀏覽器導航');
+      updateGasIframeUrl();
+    });
+    
+    // --- 初始化 iframe ---
+    updateGasIframeUrl();
 
     // --- 5. 原有的 OneSignal 初始化邏輯 (保持不變) ---
     window.OneSignalDeferred = window.OneSignalDeferred || [];
