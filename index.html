@@ -55,37 +55,31 @@
   <iframe id="gasFrame" src="https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec"></iframe>
 
   <script>
-    // 註冊 Service Worker 啟用 PWA 功能
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(() => console.log('PWA Service Worker 註冊成功'))
-        .catch((err) => console.log('註冊失敗:', err));
-    }
-
-    // 修正點 2：全面改用官方 v16 推薦的 OneSignalDeferred 語法，與 head 衝突代碼合併
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
       try {
+        // 讓 OneSignal 成為唯一的 SW 註冊發動者，避免重複註冊搶奪控制權
         await OneSignal.init({
           appId: "e6add4c0-fd20-4fe3-8b61-a63e88c090d0",
           notifyButton: { enable: true },
-          
-          // 【絕對路徑修正】去除最前方的斜線，精確拼接
           serviceWorkerPath: "Balance-Order-System/OneSignalSDKWorker.js", 
           serviceWorkerParam: { scope: "/Balance-Order-System/" } 
         });
         console.log("OneSignal 初始化成功！");
 
-        // 監聽訂閱狀態改變
+        // 【黃金修正】除了監聽改變外，在初始化完畢時「主動檢查一次」是否已有訂閱 ID
+        // 這能完美解決首次按允許時，因為 SW 還沒完全 Activation 導致 postMessage 漏接的問題
+        setTimeout(async () => {
+          const pushId = OneSignal.User.PushSubscription.id;
+          if (pushId) {
+            sendIdToGas(pushId);
+          }
+        }, 2000); // 延遲 2 秒給 Service Worker 充足的啟動時間
+
+        // 監聽後續的訂閱狀態改變
         OneSignal.User.PushSubscription.addEventListener("change", function(event) {
           if (event.current && event.current.id) {
-            const userId = event.current.id;
-            console.log("取得用戶推播ID:", userId);
-            
-            const gasFrame = document.getElementById("gasFrame");
-            if (gasFrame && gasFrame.contentWindow) {
-              gasFrame.contentWindow.postMessage({ type: "PUSH_ID", id: userId }, "*");
-            }
+            sendIdToGas(event.current.id);
           }
         });
 
@@ -93,7 +87,19 @@
         console.error("OneSignal 初始化發生錯誤:", error);
       }
     });
-    
+
+    // 封裝獨立的傳送函數，確保呼叫時代碼乾淨
+    function sendIdToGas(userId) {
+      console.log("準備將用戶推播ID傳送至 GAS:", userId);
+      const gasFrame = document.getElementById("gasFrame");
+      if (gasFrame && gasFrame.contentWindow) {
+        // 向內層的 GAS iframe 發送跨域訊號
+        gasFrame.contentWindow.postMessage({ type: "PUSH_ID", id: userId }, "*");
+      } else {
+        console.error("找不到 gasFrame，無法傳送 ID");
+      }
+    }
   </script>
+
 </body>
 </html>
