@@ -16,15 +16,8 @@
   <meta name="mobile-web-app-capable" content="yes">
   <link rel="manifest" href="manifest.json">
 
+  <!-- 1. 只保留這一個 OneSignal SDK 載入腳本 -->
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-  <script>
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(async function(OneSignal) {
-      await OneSignal.init({
-        appId: "e6add4c0-fd20-4fe3-8b61-a63e88c090d0",
-      });
-    });
-  </script> 
 
   <meta name="google-adsense-account" content="ca-pub-4906582502981364">
   <meta name="google-site-verification" content="STfcowb6CJ0DyNTcVMfEsVNjxrRAVv9TeYKViCCEHws" />
@@ -58,8 +51,8 @@
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
 
-  <!-- 嵌入你的 GAS 網頁 -->
-  <iframe src="https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec"></iframe>
+  <!-- 修正點 1：替 iframe 加上 id="gasFrame"，否則下方的 postMessage 會找不到目標而報錯 -->
+  <iframe id="gasFrame" src="https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec"></iframe>
 
   <script>
     // 註冊 Service Worker 啟用 PWA 功能
@@ -69,42 +62,35 @@
         .catch((err) => console.log('註冊失敗:', err));
     }
 
-  window.OneSignal = window.OneSignal || [];
-  
-  // 使用 OneSignal.push 確保 SDK 載入完成後才執行內部邏輯
-  OneSignal.push(async function() {
-    
-    // 防禦性檢查：確保通知 namespace 存在，避免閃退
-    if (!OneSignal.init) {
-      console.error("OneSignal SDK 尚未完全載入");
-      return;
-    }
+    // 修正點 2：全面改用官方 v16 推薦的 OneSignalDeferred 語法，與 head 衝突代碼合併
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      try {
+        await OneSignal.init({
+          appId: "e6add4c0-fd20-4fe3-8b61-a63e88c090d0",
+          notifyButton: { enable: true },
+          serviceWorkerPath: "sw.js",
+          serviceWorkerParam: { scope: "/" }
+        });
+        console.log("OneSignal 初始化成功！");
 
-    try {
-      await OneSignal.init({
-        appId: "e6add4c0-fd20-4fe3-8b61-a63e88c090d0", 
-        notifyButton: { enable: true },
-        // 強制指定 Service Worker 的路徑與註冊範圍，確保能順利讀取到 sw.js
-        serviceWorkerPath: "sw.js",
-        serviceWorkerParam: { scope: "/" }
-      });
-      console.log("OneSignal 初始化成功！");
+        // 監聽訂閱狀態改變
+        OneSignal.User.PushSubscription.addEventListener("change", function(event) {
+          if (event.current && event.current.id) {
+            const userId = event.current.id;
+            console.log("取得用戶推播ID:", userId);
+            
+            const gasFrame = document.getElementById("gasFrame");
+            if (gasFrame && gasFrame.contentWindow) {
+              gasFrame.contentWindow.postMessage({ type: "PUSH_ID", id: userId }, "*");
+            }
+          }
+        });
 
-      // 監聽訂閱狀態改變
-      OneSignal.User.PushSubscription.addEventListener("change", function(event) {
-        if (event.current && event.current.id) {
-          const userId = event.current.id;
-          console.log("取得用戶推播ID:", userId);
-          
-          const gasFrame = document.getElementById("gasFrame").contentWindow;
-          gasFrame.postMessage({ type: "PUSH_ID", id: userId }, "*");
-        }
-      });
-
-    } catch (error) {
-      console.error("OneSignal 初始化發生錯誤:", error);
-    }
-  });
+      } catch (error) {
+        console.error("OneSignal 初始化發生錯誤:", error);
+      }
+    });
   </script>
 </body>
 </html>
