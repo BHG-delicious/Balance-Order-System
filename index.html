@@ -69,8 +69,10 @@
         await OneSignal.init({
           appId: "e6add4c0-fd20-4fe3-8b61-a63e88c090d0",
           notifyButton: { enable: true },
-          serviceWorkerPath: "sw.js",
-          serviceWorkerParam: { scope: "/" }
+          
+          // 【關鍵修正】明確指定檔案名稱與正確的 GitHub Pages 當前子目錄範圍
+          serviceWorkerPath: "OneSignalSDKWorker.js", 
+          serviceWorkerParam: { scope: "./" } // 注意：改成 "./" 讓它只鎖定當前資料夾，不要爬到頂層
         });
         console.log("OneSignal 初始化成功！");
 
@@ -91,6 +93,7 @@
         console.error("OneSignal 初始化發生錯誤:", error);
       }
     });
+
   </script>
 </body>
 </html>
