@@ -18,5 +18,19 @@
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ff6060",
-  "theme_color": "#2c3e50"
+  "theme_color": "#2c3e50",
+  "screenshots": [
+    {
+      "src": "https://i.ibb.co/dwv8kNNW/screenshots-1.jpg",
+      "sizes": "1220x2539",
+      "type": "image/jpg",
+      "label": "應用程式載入畫面"
+    },
+    {
+      "src": "https://i.ibb.co/XrZ50RN1/screenshots-2.jpg",
+      "sizes": "1220x2541",
+      "type": "image/jpg",
+      "label": "系統實機畫面"
+    }
+  ]
 }
