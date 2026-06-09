@@ -1,6 +1,7 @@
 {
   "name": "大家政便當廠-儲值點餐系統",
   "short_name": "儲值點餐系統",
+  "description":　"集眾多功能於一身的儲值點餐系統",
   "icons": [
     {
       "src": "https://i.ibb.co/HfPpKRrV/BHG-logo1-192.png",
@@ -14,7 +15,10 @@
     }
   ],
   "start_url": "index.html",
+  "id": "/Balance-Order-System/index.html",
+  "scope":　"https://bhg-delicious.github.io/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000"
+  "orientation": "portrait",
+  "background_color": "#ff6060",
+  "theme_color": "#2c3e50"
 }
