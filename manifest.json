@@ -22,21 +22,21 @@
   "screenshots": [
     {
       "src": "https://i.ibb.co/dwv8kNNW/screenshots-1.jpg",
-      "sizes": "1220x2539",
+      "sizes": "1220x2540",
       "type": "image/jpg",
       "label": "應用程式載入畫面",
       "form_factor": "wide"
     },
     {
       "src": "https://i.ibb.co/XrZ50RN1/screenshots-2.jpg",
-      "sizes": "1220x2541",
+      "sizes": "1220x2540",
       "type": "image/jpg",
       "label": "系統實機畫面",
       "form_factor": "wide"
     },
     {
       "src": "https://i.ibb.co/dwv8kNNW/screenshots-1.jpg",
-      "sizes": "1220x2539",
+      "sizes": "1220x2541",
       "type": "image/jpg",
       "label": "應用程式載入畫面",
       "form_factor": "narrow"
