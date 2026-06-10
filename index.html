@@ -62,7 +62,7 @@
   <!-- End Google Tag Manager (noscript) -->
 
   <!-- 修正點 1：替 iframe 加上 id="gasFrame"，否則下方的 postMessage 會找不到目標而報錯 -->
-  <iframe id="gasFrame" src="https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec?env=github&ispwa=false"></iframe>
+  <iframe id="gasFrame" src=""></iframe>
 
   
   <iframe id="gasFrameNone" src="" height="0" width="0" style="display:none;visibility:hidden"></iframe>
@@ -70,6 +70,15 @@
   <script>
     // GAS 的實際部署網址
     const baseGasUrl = "https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec";
+    const targetUrl = new URL(baseGasUrl);
+    const githubParams = new URLSearchParams(window.location.search);
+    githubParams.forEach((value, key) => {
+      targetUrl.searchParams.set(key, value);
+    });
+    targetUrl.searchParams.set('env', 'github');
+    const gasFrame = document.getElementById("gasFrame");
+    gasFrame.src = targetUrl.toString();
+    
 
     window.OneSignalDeferred = window.OneSignalDeferred || [];
     OneSignalDeferred.push(async function(OneSignal) {
