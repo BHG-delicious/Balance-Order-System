@@ -105,10 +105,13 @@
     function getPWADisplayMode() {
       const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
       if (document.referrer.startsWith("android-app://")) {
+        console.log('isPWA');
         return true;
       } else if (navigator.standalone || isStandalone) {
+        console.log('isPWA');
         return true;
       }
+      console.log('notPWA');
       return false;
     }
   </script>
