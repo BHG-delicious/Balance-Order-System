@@ -13,8 +13,8 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "index.html",
-  "id": "/Balance-Order-System/index.html",
+  "start_url": "index.html?ispwa=true",
+  "id": "/Balance-Order-System/index.html?ispwa=true",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ff6060",
