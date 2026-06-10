@@ -52,7 +52,7 @@
   <!-- End Google Tag Manager (noscript) -->
 
   <!-- 修正點 1：替 iframe 加上 id="gasFrame"，否則下方的 postMessage 會找不到目標而報錯 -->
-  <?= getPWADisplayMode() ? <iframe id="gasFrame" src="https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec?env=github&ispwa=true"></iframe> : <iframe id="gasFrame" src="https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec?env=github&ispwa=false"></iframe> ?>
+  <?= window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true ? <iframe id="gasFrame" src="https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec?env=github&ispwa=true"></iframe> : <iframe id="gasFrame" src="https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec?env=github&ispwa=false"></iframe> ?>
 
   <iframe id="gasFrameNone" src="" height="0" width="0" style="display:none;visibility:hidden"></iframe>
 
@@ -100,19 +100,6 @@
       // 如果 iframe 當前的網址還沒有這個參數，就幫它轉跳導向（首次訂閱或新用戶時會觸發一次）
       gasFrame.src = baseGasUrl + "?pushId=" + userId;
       
-    }
-
-    function getPWADisplayMode() {
-      const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
-      if (document.referrer.startsWith("android-app://")) {
-        console.log('isPWA');
-        return true;
-      } else if (navigator.standalone || isStandalone) {
-        console.log('isPWA');
-        return true;
-      }
-      console.log('notPWA');
-      return false;
     }
   </script>
 
