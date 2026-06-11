@@ -75,7 +75,7 @@
     const baseGasUrl = "https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec";
     const targetUrl = new URL(baseGasUrl);
     const githubParams = new URLSearchParams(window.location.search);
-    targetUrl.searchParams.set('utm_source', 'github pages');
+    targetUrl.searchParams.set('utm_source', 'github_pages');
     githubParams.forEach((value, key) => {
       targetUrl.searchParams.set(key, value);
     });
