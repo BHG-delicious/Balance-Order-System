@@ -52,6 +52,20 @@
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4906582502981364" 
     crossorigin="anonymous"></script>
+
+  <script>
+    // GAS 的實際部署網址
+    const baseGasUrl = "https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec";
+    const targetUrl = new URL(baseGasUrl);
+    const githubParams = new URLSearchParams(window.location.search);
+    targetUrl.searchParams.set('utm_source', 'github_pages');
+    targetUrl.searchParams.set('utm_medium', 'github');
+    targetUrl.searchParams.set('utm_campaign', 'balance-order-system');
+    githubParams.forEach((value, key) => {
+      targetUrl.searchParams.set(key, value);
+    });
+    targetUrl.searchParams.set('env', 'github');
+  </script>
   
   <style>
     html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #ffffff; }
@@ -71,17 +85,6 @@
   <iframe id="gasFrameNone" src="" height="0" width="0" style="display:none;visibility:hidden"></iframe>
 
   <script>
-    // GAS 的實際部署網址
-    const baseGasUrl = "https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec";
-    const targetUrl = new URL(baseGasUrl);
-    const githubParams = new URLSearchParams(window.location.search);
-    targetUrl.searchParams.set('utm_source', 'github_pages');
-    targetUrl.searchParams.set('utm_medium', 'github');
-    targetUrl.searchParams.set('utm_campaign', 'balance-order-system');
-    githubParams.forEach((value, key) => {
-      targetUrl.searchParams.set(key, value);
-    });
-    targetUrl.searchParams.set('env', 'github');
     const gasFrame = document.getElementById("gasFrame");
     gasFrame.src = targetUrl.toString();
     
