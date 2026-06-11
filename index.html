@@ -79,14 +79,14 @@
   <!-- End Google Tag Manager (noscript) -->
 
   <!-- 修正點 1：替 iframe 加上 id="gasFrame"，否則下方的 postMessage 會找不到目標而報錯 -->
-  <iframe id="gasFrame" src=targetUrl.toString()></iframe>
+  <iframe id="gasFrame" src="https://i.ibb.co/5xTvWTFg/logo-loading.gif"></iframe>
 
   
   <iframe id="gasFrameNone" src="" height="0" width="0" style="display:none;visibility:hidden"></iframe>
 
   <script>
-    /*const gasFrame = document.getElementById("gasFrame");
-    gasFrame.src = targetUrl.toString();*/
+    const gasFrame = document.getElementById("gasFrame");
+    gasFrame.src = targetUrl.toString();
     
     const keysToClearFromUrl = ['password', 'utm_source', 'utm_medium', 'utm_campaign'];
 
@@ -106,7 +106,7 @@
       if (needToCleanUrl) {
         const newUrlString = currentUrl.pathname + currentUrl.search + currentUrl.hash;
         window.history.replaceState({}, document.title, newUrlString);
-        console.log('【網址淨化】: ', currentUrl, ' to ', newUrlString);
+        console.log('【網址淨化】: ', currentUrl.toString(), ' to ', newUrlString);
       }
     })();
     
