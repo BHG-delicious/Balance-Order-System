@@ -76,6 +76,8 @@
     const targetUrl = new URL(baseGasUrl);
     const githubParams = new URLSearchParams(window.location.search);
     targetUrl.searchParams.set('utm_source', 'github_pages');
+    targetUrl.searchParams.set('utm_medium', 'github');
+    targetUrl.searchParams.set('utm_campaign', 'balance-order-system');
     githubParams.forEach((value, key) => {
       targetUrl.searchParams.set(key, value);
     });
