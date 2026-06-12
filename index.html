@@ -106,7 +106,7 @@
   
       // 如果有匹配到需要移除的參數，在不刷新頁面的情況下，瞬間變更瀏覽器自身網址
       if (needToCleanUrl) {
-        const oldUrlString = originalUrl.pathname + originalUrl.searsh + originalUrl.hash
+        const oldUrlString = originalUrl.pathname + originalUrl.search + originalUrl.hash
         const newUrlString = currentUrl.pathname + currentUrl.search + currentUrl.hash;
         window.history.replaceState({}, document.title, newUrlString);
         console.log('【網址淨化】: ', oldUrlString, ' to ', newUrlString);
