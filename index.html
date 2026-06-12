@@ -93,7 +93,7 @@
 
     (function() {
       const currentUrl = new URL(window.location.href);
-      const originalUrl = currentUrl;
+      const originalUrl = new URL(window.location.href);
       let needToCleanUrl = false;
   
       // 檢查並移除特定參數
