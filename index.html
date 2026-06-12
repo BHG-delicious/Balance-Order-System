@@ -109,7 +109,7 @@
         const oldUrlString = originalUrl.pathname + originalUrl.search + originalUrl.hash
         const newUrlString = currentUrl.pathname + currentUrl.search + currentUrl.hash;
         window.history.replaceState({}, document.title, newUrlString);
-        console.log('【網址淨化】: ', oldUrlString, ' to ', newUrlString);
+        console.log('【網址淨化】: \n', oldUrlString, '\nto\n', newUrlString);
       }
     })();
     
