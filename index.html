@@ -90,23 +90,30 @@
 
   <noscript>
     <table id="warning-bar-table" cellspacing="0" cellpadding="0"><tbody><tr><td>
-    <div class="warning-banner">
-      <div class="warning-banner-header">
-        <span class="warning-banner-icon">
+      <div id="warning" class="warning-bar warning-banner-bar" role="banner" aria-live="assertive" aria-labelledby="warning-text">
+        <div class="warning-banner">
+          <div class="warning-banner-header">
+            <span class="warning-banner-icon">
+              <svg aria-hidden="true" viewbox="0 0 24 24" width="24px" height="24px">
+                <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path>
+              </svg>
+            </span>
+            <div class="warning-banner-text" id="warning-text" role="alert">
+              您的瀏覽器目前已停用 JavaScript。為了獲得完整的網頁體驗，請開啟 JavaScript 後重新整理頁面。
+            </div>
+          </div>
+          <div class="warning-banner-buttons">
+            <a class="warning-link" href="https://support.google.com/adsense/answer/12654?hl=zh-Hant" target="_blank">
+              瞭解詳情
+            </a>
+          </div>
+        </div>
+        <div class="warning-banner-close-icon" tabindex="0" role="button" aria-label="關閉">
           <svg aria-hidden="true" viewbox="0 0 24 24" width="24px" height="24px">
-            <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path>
+            <path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6Z"></path>
           </svg>
-        </span>
-        <div class="warning-banner-text" id="warning-text" role="alert">
-          您的瀏覽器目前已停用 JavaScript。為了獲得完整的網頁體驗，請開啟 JavaScript 後重新整理頁面。
         </div>
       </div>
-      <div class="warning-banner-buttons">
-        <a class="warning-link" href="https://support.google.com/adsense/answer/12654?hl=zh-Hant" target="_blank">
-          瞭解詳情
-        </a>
-      </div>
-    </div>
     </td></tr></tbody></table>
     <iframe src="https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec?utm_source=noscript&utm_medium=github&utm_campaign=balance-order-system"></iframe>
   </noscript>
