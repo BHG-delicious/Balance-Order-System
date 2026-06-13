@@ -97,7 +97,7 @@
     const gasFrame = document.getElementById("gasFrame");
     gasFrame.src = targetUrl.toString();
     
-    const keysToClearFromUrl = ['password', 'utm_source', 'utm_medium', 'utm_campaign'];
+    const keysToClearFromUrl = ['password', 'utm_source', 'utm_medium', 'utm_campaign', 'fbclid'];
 
     (function() {
       const currentUrl = new URL(window.location.href);
