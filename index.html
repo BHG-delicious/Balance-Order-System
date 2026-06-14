@@ -243,7 +243,7 @@
           mesage: event.data.message
         });
       } else {
-        console.log('收到來自 GAS 的事件');
+        console.log('收到非來自 GAS 的事件', event.data || 'none');
       }
     });
   </script>
