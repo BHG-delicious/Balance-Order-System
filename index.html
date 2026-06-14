@@ -222,5 +222,30 @@
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
   </script>
+
+  <script>
+    // 監聽來自內嵌 iframe (GAS) 的訊息
+    window.addEventListener('message', function(event) {
+      // 安全檢查：確保訊息是來自 Google Script 網域
+      if (!event.origin.includes('google.com') && !event.origin.includes('googleusercontent.com')) {
+        console.log('訊息不是來自 Google Script 網域');
+        return; 
+      }
+      
+      // 如果確認是我們自己發出的 GAS 事件
+      if (event.data && event.data.type === 'GAS_EVENT') {
+        console.log('收到來自 GAS 的事件:', event.data);
+        
+        // 核心：把資料推進主網頁的 dataLayer，讓外殼的 GTM 或 gtag 統一發送！
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: event.data.eventName,
+          mesage: event.data.message
+        });
+      } else {
+        console.log('收到來自 GAS 的事件');
+      }
+    });
+  </script>
 </body>
 </html>
