@@ -245,6 +245,8 @@
       } else {
         console.log('收到非來自 GAS 的事件', event.data || 'none');
       }
+      const gasFrame = document.getElementById("gasFrame");
+      console.log(gasFrame.src);
     });
   </script>
 </body>
