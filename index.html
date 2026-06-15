@@ -245,12 +245,12 @@
         console.log('收到來自 GAS 的參數:', event.data);
         const currentUrl = new URL(window.location.href);
         if (event.data.parName === 'hash') {
-          window.history.pushState({}, document.title, currentUrl.pathname + currentUrl.search + event.data.parCont);
+          currentUrl.hash = event.data.parCont;
+          window.history.pushState({}, document.title, currentUrl);
         } else {
           currentUrl.searchParams.set(event.data.parName, event.data.parCont);
-          window.history.pushState({}, document.title, currentUrl.pathname + currentUrl.search + currentUrl.hash);
+          window.history.pushState({}, document.title, currentUrl);
         }
-        window.history.pushState({}, document.title, newUrlString);
       } else {
         console.log('收到非來自 GAS 的事件', event.data || 'none');
       }
