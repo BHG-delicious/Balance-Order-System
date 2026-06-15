@@ -244,8 +244,12 @@
       } else if (event.data && event.data.type === 'GAS_URL') {
         console.log('收到來自 GAS 的參數:', event.data);
         const currentUrl = new URL(window.location.href);
-        currentUrl.searchParams.set(event.parName, event.parCont);
-        const newUrlString = currentUrl.pathname + currentUrl.search + currentUrl.hash;
+        if (event.data.parName === 'hash') {
+          const newUrlString = currentUrl.pathname + currentUrl.search + event.data.parCont;
+        } else {
+          currentUrl.searchParams.set(event.data.parName, event.data.parCont);
+          const newUrlString = currentUrl.pathname + currentUrl.search + currentUrl.hash;
+        }
         window.history.pushState({}, document.title, newUrlString);
       } else {
         console.log('收到非來自 GAS 的事件', event.data || 'none');
