@@ -240,7 +240,7 @@
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
           event: event.data.eventName,
-          mesage: event.data.message
+          message: event.data.message
         });
       } else {
         console.log('收到非來自 GAS 的事件', event.data || 'none');
