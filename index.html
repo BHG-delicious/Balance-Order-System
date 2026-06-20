@@ -280,7 +280,8 @@
           window.history.pushState({}, document.title, currentUrl);
           gtag('event', 'page_view', {
             page_title: event.data.parCont,
-            page_location: window.location.href
+            page_location: window.location.href,
+            user_agent: navigator.userAgent
           })
         }
       } else {
