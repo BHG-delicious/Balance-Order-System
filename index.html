@@ -254,12 +254,20 @@
       // 如果確認是我們自己發出的 GAS 事件
       if (event.data && event.data.type === 'GAS_EVENT') {
         console.log('收到來自 GAS 的事件:', event.data);
+
+        switch (event.data.cmd) {
+          case 'event':
+            gtag('event', event.data.eventName, event.data.detail);
+            break;
+          case 'set':
+            gtag('set', event.data.detail);
+            break;
+        }
         
         // 核心：把資料推進主網頁的 dataLayer，讓外殼的 GTM 或 gtag 統一發送！
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
-          event: event.data.eventName,
-          message: event.data.message
+          event: event.data.eventName
         });
       } else if (event.data && event.data.type === 'GAS_URL') {
         console.log('收到來自 GAS 的參數:', event.data);
@@ -270,6 +278,10 @@
         } else {
           currentUrl.searchParams.set(event.data.parName, event.data.parCont);
           window.history.pushState({}, document.title, currentUrl);
+          gtag('event', 'page_view', {
+            page_title: event.data.parCont,
+            page_location: window.location.href
+          })
         }
       } else {
         console.log('收到非來自 GAS 的事件', event.data || 'none');
