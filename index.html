@@ -263,12 +263,6 @@
             gtag('set', event.data.detail);
             break;
         }
-        
-        // 核心：把資料推進主網頁的 dataLayer，讓外殼的 GTM 或 gtag 統一發送！
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: event.data.eventName
-        });
       } else if (event.data && event.data.type === 'GAS_URL') {
         console.log('收到來自 GAS 的參數:', event.data);
         const currentUrl = new URL(window.location.href);
