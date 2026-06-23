@@ -262,7 +262,9 @@
 
         switch (event.data.cmd) {
           case 'event':
-            gtag('event', event.data.eventName, event.data.detail);
+            if (event.data.eventName !== 'page_view') {
+              gtag('event', event.data.eventName, event.data.detail);
+            }
             break;
           case 'set':
             gtag('set', event.data.detail);
@@ -281,7 +283,8 @@
             page_title: event.data.parCont,
             page_location: window.location.href,
             user_agent: navigator.userAgent
-          })
+          });
+          gtag('set',{'Page Title': event.data.parCont});
         }
       } else {
         console.log('收到非來自 GAS 的事件', event.data || 'none');
