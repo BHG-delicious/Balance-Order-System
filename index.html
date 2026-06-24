@@ -156,6 +156,11 @@
   <script>
     const gasFrame = document.getElementById("gasFrame");
     gasFrame.src = targetUrl.toString();
+
+    window.addEventListener('appinstalled', (evt) => {
+      console.log('PWA 已成功安裝！');
+      gtag('event', 'appinstalled', {});
+    });
     
     const keysToClearFromUrl = ['password', 'utm_source', 'utm_medium', 'utm_campaign', 'fbclid', 'gtm_debug'];
 
