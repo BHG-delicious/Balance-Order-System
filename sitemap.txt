@@ -17,3 +17,4 @@ https://bhg-delicious.github.io/Balance-Order-System/應用程式服務條款.tx
 https://bhg-delicious.github.io/Balance-Order-System/應用程式隱私權政策.txt
 https://bhg-delicious.github.io/Balance-Order-System/README.md
 https://bhg-delicious.github.io/Balance-Order-System/favicon.ico
+https://bhg-delicious.github.io/Balance-Order-System/sitemap.xml
