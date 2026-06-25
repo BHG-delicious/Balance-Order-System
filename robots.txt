@@ -1,2 +1,3 @@
 User-agent: *
 Allow: /
+Sitemap: https://bhg-delicious.github.io/Balance-Order-System/sitemap.txt
