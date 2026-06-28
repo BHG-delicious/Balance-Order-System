@@ -316,6 +316,7 @@
 
   <script>
     const gasFrame = document.getElementById("gasFrame");
+    gasFrame.srcdoc = "";
     gasFrame.src = targetUrl.toString();
 
     window.addEventListener('appinstalled', (evt) => {
