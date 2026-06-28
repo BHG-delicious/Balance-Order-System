@@ -183,7 +183,2224 @@
   </noscript>
 
   <!-- 修正點 1：替 iframe 加上 id="gasFrame"，否則下方的 postMessage 會找不到目標而報錯 -->
-  <iframe id="gasFrame" allow="clipboard-read; clipboard-write" src=""></iframe>
+  <iframe id="gasFrame" allow="clipboard-read; clipboard-write" src="" srcdoc="
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ==================== 重置與基礎樣式 ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #95a5a6;
+            --radius: 12px;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f7fa;
+            min-height: 100vh;
+            padding-bottom: 80px; /* 為底部導航留空間 */
+        }
+        
+        /* ==================== 底部導航 ==================== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #ddd;
+            display: flex;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            height: 60px;
+        }
+        
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--gray);
+            font-size: 0.75rem;
+            padding: 8px 4px;
+            transition: var(--transition);
+        }
+        
+        .nav-item.active {
+            color: var(--secondary);
+        }
+        
+        .nav-icon {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+        
+        /* ==================== 頂部標題 ==================== */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--primary);
+            color: white;
+            padding: 12px 16px;
+            text-align: center;
+            margin-bottom: 16px;
+            position: relative;
+            min-height: 70px;
+        }
+        
+        .header h1 {
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+        
+        .header-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .admin-btn {
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 15px;
+            transition: background 0.3s ease;
+        }
+        .admin-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        /* 標誌容器 */
+        .logo-container {
+            flex-shrink: 0;
+            margin-right: 15px;
+        }
+
+        /* 網站標誌 */
+        .site-logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 80px;
+            object-fit: contain;
+            background: none;
+            padding: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* 標題容器 */
+        .title-container {
+            flex: 1;
+            text-align: center;
+            min-width: 0; /* 防止文字溢出 */
+        }
+
+        .title-container h1 {
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .header {
+                padding: 10px 12px;
+                min-height: 60px;
+            }
+            
+            .site-logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .title-container h1 {
+                font-size: 1.2rem;
+            }
+            
+            .header-subtitle {
+                font-size: 0.8rem;
+            }
+            
+            .admin-btn {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .admin-btn span {
+                display: none; /* 在小螢幕隱藏文字 */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 8px 10px;
+            }
+            
+            .site-logo {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .title-container h1 {
+                font-size: 1.1rem;
+            }
+        }
+        /* ==================== 頁面容器 ==================== */
+        .page-container {
+            display: none;
+            padding: 0 16px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .page-container.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* ==================== 卡片樣式 ==================== */
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--light);
+        }
+        
+        /* ==================== 表單樣式 ==================== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #ddd;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        
+        .form-control.error {
+            border-color: var(--danger);
+        }
+        
+        .form-text {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 4px;
+            display: block;
+        }
+        
+        /* ==================== 按鈕樣式 ==================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 20px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            width: 100%;
+            gap: 8px;
+            margin: 8px 0;
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: var(--gray);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* ==================== 餘額顯示 ==================== */
+        .balance-display {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--radius);
+            color: white;
+            margin: 20px 0;
+        }
+        
+        .balance-amount {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .balance-positive {
+            color: var(--success);
+        }
+        
+        .balance-negative {
+            color: var(--danger);
+        }
+        
+        /* ==================== 表格樣式 ==================== */
+        .table-container {
+            overflow-x: auto;
+            margin: 16px 0;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 300px;
+        }
+        
+        .table th {
+            background: var(--light);
+            color: var(--primary);
+            font-weight: 600;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* ==================== 標籤與徽章 ==================== */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .badge-success {
+            background: var(--success);
+            color: white;
+        }
+        
+        .badge-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        /* ==================== 訊息樣式 ==================== */
+        .message {
+            padding: 16px;
+            border-radius: var(--radius);
+            margin: 16px 0;
+            border-left: 4px solid transparent;
+        }
+        
+        .message-success {
+            background: rgba(39, 174, 96, 0.1);
+            border-left-color: var(--success);
+            color: var(--success);
+        }
+        
+        .message-error {
+            background: rgba(231, 76, 60, 0.1);
+            border-left-color: var(--danger);
+            color: var(--danger);
+        }
+        
+        .message-warning {
+            background: rgba(243, 156, 18, 0.1);
+            border-left-color: var(--warning);
+            color: var(--warning);
+        }
+        
+        .message-info {
+            background: rgba(52, 152, 219, 0.1);
+            border-left-color: var(--secondary);
+            color: var(--secondary);
+        }
+        
+        /* ==================== 模態視窗 ==================== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            border-radius: var(--radius);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow: hidden;
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-message{
+          display: grid;
+          place-items: center;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .modal-footer {
+            padding: 20px;
+            background: var(--light);
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* ==================== 載入動畫 ==================== */
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(52, 152, 219, 0.3);
+            border-top-color: var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ==================== 響應式調整 ==================== */
+        @media (min-width: 768px) {
+            body {
+                max-width: 500px;
+                margin: 0 auto;
+                padding-bottom: 0;
+            }
+            
+            .bottom-nav {
+                max-width: 500px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+        
+        /* ==================== 列表樣式 ==================== */
+        .list-item {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .list-item:last-child {
+            border-bottom: none;
+        }
+        
+        /* ==================== 頁腳 ==================== */
+        .footer {
+            text-align: center;
+            padding: 30px 16px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* ==================== 新增：按鈕群組樣式 ==================== */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .button-group .btn {
+            flex: 1;
+            min-width: 150px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* 響應式調整 */
+        @media (max-width: 768px) {
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .button-group .btn {
+                width: 100%;
+                min-width: unset;
+            }
+        }
+
+        /* ==================== 新增：統計圖表樣式 ==================== */
+
+        /* 統計網格 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: var(--radius);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-card.positive {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        }
+
+        .stat-card.warning {
+            background: linear-gradient(135deg, #f39c12 0%, #d35400 100%);
+        }
+
+        .stat-card.danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+
+        .stat-card.info {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        }
+
+        .stat-card.a {
+            background: linear-gradient(135deg, #FF0000 0%, #4F5050 100%);
+        }
+
+        .stat-card.b {
+            background: linear-gradient(135deg, #FF5530 0%, #4FA580 100%);
+        }
+
+        .stat-card.c {
+            background: linear-gradient(135deg, #00F300 0%, #504F50 100%);
+        }
+
+        .stat-card.d {
+            background: linear-gradient(135deg, #0076FF 0%, #50B64F 100%);
+        }
+
+        .stat-card.e {
+            background: linear-gradient(135deg, #4800FF 0%, #98504F 100%);
+        }
+
+        .stat-card.f {
+            background: linear-gradient(135deg, #FF00E8 0%, #4F5038 100%);
+        }
+
+        .stat-card .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* 圖表容器 */
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        /* 類別列表 */
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .category-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: var(--radius);
+            border-left: 4px solid var(--secondary);
+        }
+
+        .category-item .category-info {
+            flex: 1;
+        }
+
+        .category-item .category-name {
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .category-item .category-stats {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .category-item .category-amount {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .category-item .category-percentage {
+            background: var(--light);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* 趨勢圖表 */
+        .trend-chart {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .trend-bar {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            gap: 15px;
+        }
+
+        .trend-month {
+            width: 80px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .trend-bar-track {
+            flex: 1;
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .trend-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            border-radius: 10px;
+            min-width: 20px;
+        }
+
+        .trend-amount {
+            width: 60px;
+            text-align: right;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* 響應式調整 */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 10px;
+            }
+            
+            .stat-card {
+                padding: 15px;
+            }
+            
+            .stat-card .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .trend-month {
+                width: auto;
+            }
+            
+            .trend-amount {
+                width: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-container .card {
+                margin-bottom: 20px !important;
+            }
+            
+            /* 在圖表和詳細資訊之間添加分隔 */
+            #categoryChartContainer {
+                margin-bottom: 20px;
+                padding-bottom: 20px;
+                /*border-bottom: 1px solid #eee;*/
+            }
+            
+            /* 減少詳細資訊的字體大小 */
+            #categoryDetails {
+                font-size: 1rem;
+            }
+        }
+
+        /* 方案5: 現代Flexbox（推薦） */
+        .modern-center {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          /*gap: 10px;*/
+        }
+        
+        .modern-center .counter-label {
+          font-size: 0.9rem;
+          color: var(--gray);
+          line-height: 1.6;
+          /*padding: 30px 16px;*/
+        }
+        
+          
+        /* 在小屏幕上確保計數器不會溢出 */
+        nobr table {
+          max-width: 100%;
+        }
+        
+        nobr img {
+          max-width: 100%;
+          height: auto;
+        }
+        
+        
+        /* 美化計數器 */
+        .counter-container {
+          background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
+          padding: 15px;
+          border-radius: 8px;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        details.coloregg-summary > summary {
+          list-style-type: none;
+          padding-left: 0;
+        }
+
+        details.custom-arrow > summary {
+          list-style-type: none;
+          position: relative;
+          padding-left: 25px;
+        }
+        
+        details.custom-arrow > summary::before {
+          content: '▶';
+          position: absolute;
+          left: 5px;
+          top: 50%;
+          transform: translateY(-50%);
+          transition: transform 0.3s;
+        }
+        
+        details.custom-arrow[open] > summary::before {
+          transform: translateY(-50%) rotate(90deg);
+        }
+
+        details.custom-a > summary {
+          content: '';
+          list-style-type: none;
+          position: relative;
+        }
+
+        /* ==================== 導航動畫 ==================== */
+        /* 導航動畫 - 修正 pointer-events */
+        #userNavItems, #adminNavItems {
+            display: flex;
+            flex: 5;
+            transition: opacity 0.3s ease;
+        }
+
+        /* 初始狀態 - 使用者導航顯示，管理員導航隱藏 */
+        #userNavItems {
+            display: flex !important;
+            opacity: 1;
+            pointer-events: auto !important; /* 確保可以點擊 */
+        }
+
+        #adminNavItems {
+            display: none !important;
+            opacity: 0;
+            pointer-events: none !important; /* 確保不能點擊 */
+        }
+
+        /* 管理員模式下的狀態 - 使用更強的選擇器 */
+        body.admin-mode #userNavItems {
+            display: none !important;
+            opacity: 0;
+            pointer-events: none !important;
+        }
+
+        body.admin-mode #adminNavItems {
+            display: flex !important;
+            opacity: 1;
+            pointer-events: auto !important; /* 確保可以點擊 */
+        }
+
+        /* 確保管理員導航內的項目也可點擊 */
+        body.admin-mode #adminNavItems .nav-item {
+            pointer-events: auto !important;
+            cursor: pointer !important;
+        }
+
+        /* 管理切換按鈕 */
+        .admin-toggle {
+            flex: 1;
+            background: var(--primary);
+            color: white;
+            border-left: 2px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer !important; /* 強制顯示手指 */
+            text-decoration: none;
+            z-index: 10;
+            pointer-events: auto !important; /* 確保可以點擊 */
+        }
+
+        .admin-toggle[data-mode="off"] {
+            background: var(--primary);
+        }
+
+        .admin-toggle[data-mode="off"] i,
+        .admin-toggle[data-mode="off"] span {
+            color: white;
+        }
+
+        .admin-toggle[data-mode="on"] {
+            background: var(--success);
+        }
+
+        .admin-toggle[data-mode="on"] i,
+        .admin-toggle[data-mode="on"] span {
+            color: white;
+        }
+
+        /* 確保所有導航項目都可點擊 */
+        .nav-item {
+            cursor: pointer !important;
+            text-decoration: none;
+            pointer-events: auto !important;
+        }
+
+        /* 管理員頁面容器 */
+        .admin-page {
+            display: none;
+        }
+
+        .admin-page.active {
+            display: block;
+        }
+
+        /* 點餐頁面專用樣式 */
+        #userTodayMeals .table td {
+            vertical-align: middle;
+        }
+
+        #userTodayMeals .btn {
+            margin: 0;
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+
+        #userMealsCount {
+            background: var(--secondary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .meal-summary {
+            background: #f8f9fa;
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .meal-summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed #dee2e6;
+        }
+
+        .meal-summary-item:last-child {
+            border-bottom: none;
+        }
+
+        /* 餐點選擇器樣式 */
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+            padding-right: 2.5rem;
+        }
+
+        /* 餐點操作按鈕 */
+        .meal-action-btn {
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .meal-action-btn:hover {
+            background: #f8f9fa;
+        }
+
+        .meal-action-btn.danger:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+
+        /* ==================== GIF 載入動畫 ==================== */
+        .loading-gif {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .loading-gif img {
+            width: 160px;
+            height: 160px;
+            object-fit: contain;
+            margin-bottom: 16px;
+        }
+
+        .loading-gif p {
+            color: var(--gray);
+            font-size: 1.5rem;
+        }
+
+        /* 查詢餘額頁面交易紀錄表格響應式調整 */
+        @media (max-width: 2000px) {
+            .table th, .table td {
+                font-size: 0.75rem;
+                padding: 8px 4px;
+            }
+            
+            .table th:nth-child(1), .table td:nth-child(1) {
+                min-width: 90px;
+            }
+            
+            .table th:nth-child(3), .table td:nth-child(3) {
+                min-width: 120px;
+                max-width: 150px;
+            }
+        }
+
+        /* ==================== 簡易訂單表格間距調整 ==================== */
+
+        /* 簡易訂單表格整體間距 */
+        #ordersContainer .table {
+            margin-bottom: 0;
+        }
+
+        #ordersContainer .table th,
+        #ordersContainer .table td {
+            padding: 6px 8px;
+            vertical-align: middle;
+        }
+
+        /* 縮小數量和小計欄位的寬度 */
+        #ordersContainer .table th:nth-child(3),
+        #ordersContainer .table td:nth-child(3),
+        #ordersContainer .table th:nth-child(4),
+        #ordersContainer .table td:nth-child(4) {
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        /* 數量欄位特別縮小 */
+        #ordersContainer .table td:nth-child(3) {
+            text-align: center;
+            min-width: 40px;
+            width: 60px;
+        }
+
+        /* 小計欄位 */
+        #ordersContainer .table td:nth-child(4) {
+            text-align: right;
+            min-width: 70px;
+            width: 80px;
+        }
+
+        /* 品項欄位允許換行 */
+        #ordersContainer .table td:nth-child(2) {
+            word-break: break-word;
+            white-space: normal;
+            line-height: 1.3;
+        }
+
+        /* 子類別縮排調整 */
+        #ordersContainer .table td:first-child {
+            width: 30px;
+            padding-right: 0;
+        }
+
+        /* 美食廣場分類標題行 */
+        #ordersContainer .table thead tr th {
+            background: var(--light);
+            font-weight: 600;
+            padding: 8px 8px;
+        }
+
+        /* 品項名稱行（小分類） */
+        #ordersContainer .table tbody tr td strong {
+            font-size: 0.9rem;
+        }
+
+        /* 響應式調整 */
+        @media (max-width: 768px) {
+            #ordersContainer .table th,
+            #ordersContainer .table td {
+                padding: 4px 6px;
+                font-size: 0.8rem;
+            }
+            
+            #ordersContainer .table td:nth-child(3) {
+                min-width: 35px;
+                width: 45px;
+            }
+            
+            #ordersContainer .table td:nth-child(4) {
+                min-width: 60px;
+                width: 70px;
+            }
+        }
+    </style>
+  </head>
+  <body>
+    <!-- 頂部標題 -->
+    <header class="header">
+        <!-- 標誌放在左邊 -->
+        <div class="logo-container">
+            <img src="https://i.ibb.co/1JJzGkTw/BHG-logo1.png" alt="BHG-logo" class="site-logo">
+        </div>
+        
+        <!-- 標題在中間 -->
+        <div class="title-container">
+            <h1>大家政便當廠</h1>
+            <div class="header-subtitle">儲值點餐系統</div>
+        </div>
+        
+        <!-- 管理員按鈕在右邊 -->
+        <button class="admin-btn" onclick="showAdminModal();sendDataToGitHub('event', 'click')">
+            <i id="adminStatusIcon" class="fas fa-user-shield"></i>
+            <span id="adminStatusText">管理員</span>
+        </button>
+    </header>
+
+    <!-- 頁面容器 -->
+    <div id="pageContent">
+        <!-- 查詢餘額頁面 -->
+        <div class="page-container active" id="balancePage">
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-search-dollar"></i> 查詢餘額
+                </h2>
+                
+                <form id="balanceForm">
+                    <div class="form-group">
+                        <label class="form-label">學號</label>
+                        <input type="text" id="userId" class="form-control" 
+                               placeholder="請輸入6位數學號" maxlength="6" required>
+                        <span class="form-text">例：210411</span>
+                        <span class="form-text">注意：因為某飯哥偷懶的緣故，201同學輸入學號是查不到餘額的，欲查詢請輸入六位數「班級+座號」，例：201001</span>
+                    </div>
+                    
+                    <button type="button" class="btn btn-primary" onclick="queryBalance();sendDataToGitHub('event', 'click')">
+                        <i class="fas fa-search"></i> 查詢餘額
+                    </button>
+                </form>
+            </div>
+            
+            <div id="balanceResult"></div>
+        </div>
+
+        <!-- 統計分析頁面 -->
+        <div class="page-container" id="analyticsPage">
+            <!-- 系統統計面板 -->
+            <div class="card" id="statsPanel">
+                <h2 class="card-title">
+                    <i class="fas fa-chart-line"></i> 系統統計
+                </h2>
+                
+                <div class="stats-grid" id="statsGrid">
+                    <div class="loading-gif">
+                        <img src="https://i.ibb.co/B2HbB9ND/herta-kuru1.gif" alt="載入中...">
+                        <p>載入統計數據中...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 複製名單按鈕 -->
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-clipboard-list"></i> 通知名單產生
+                </h2>
+                
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="copyAllUsersList();sendDataToGitHub('event', 'click')">
+                        <i class="fas fa-users"></i> 複製全體餘額名單
+                    </button>
+                    <button class="btn btn-warning" onclick="copyNegativeUsersList();sendDataToGitHub('event', 'click')">
+                        <i class="fas fa-exclamation-triangle"></i> 複製餘額不足名單
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 消費類別分佈 -->
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-chart-pie"></i> 消費類別分佈
+                </h2>
+                
+                <div id="categoryChartContainer">
+                    <div class="loading-gif">
+                        <img src="https://i.ibb.co/LdhqvgKS/herta-kuru2.gif" alt="載入中...">
+                        <p>載入類別分佈中...</p>
+                    </div>
+                </div>
+                
+                <div id="categoryDetails" style="margin-top: 20px;"></div>
+            </div>
+            
+            <!-- 每月消費趨勢 -->
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-chart-bar"></i> 每月消費趨勢
+                </h2>
+                
+                <div id="monthlyChartContainer">
+                    <div class="loading-gif">
+                        <img src="https://i.ibb.co/B2HbB9ND/herta-kuru1.gif" alt="載入中...">
+                        <p>載入消費趨勢中...</p>
+                    </div>
+                </div>
+                
+                <div id="monthlyDetails" style="margin-top: 20px;"></div>
+            </div>
+            
+            <!-- 餘額不足使用者列表 -->
+            <div class="card" id="negativeUsersCard">
+                <h2 class="card-title">
+                    <i class="fa fa-exclamation-triangle"></i> 餘額不足名單
+                </h2>
+                
+                <div id="negativeUsersContainer">
+                    <div class="loading-gif">
+                        <img src="https://i.ibb.co/LdhqvgKS/herta-kuru2.gif" alt="載入中...">
+                        <p>載入餘額不足名單中...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 使用者儲值頁面 -->
+        <div class="page-container" id="rechargePage">
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-gift"></i> 兌換碼儲值
+                </h2>
+                
+                <form id="userRechargeForm">
+                    <div class="form-group">
+                        <label class="form-label">學號</label>
+                        <input type="text" id="userRechargeUserId" class="form-control" 
+                              placeholder="請輸入6位數學號" maxlength="6" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">兌換碼</label>
+                        <input type="text" id="userGiftCode" class="form-control" 
+                              placeholder="請輸入6位兌換碼" maxlength="6" required>
+                        <span class="form-text">請輸入管理員提供的6位數字兌換碼</span>
+                    </div>
+                    
+                    <button type="button" class="btn btn-success" onclick="redeemGiftCode();sendDataToGitHub('event', 'click')">
+                        <i class="fas fa-check"></i> 確認兌換
+                    </button>
+                </form>
+            </div>
+            
+            <div id="userRechargeResult"></div>
+        </div>
+
+        <!-- 系統資訊頁面 -->
+        <div class="page-container" id="systemPage">
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-info-circle"></i> 系統資訊
+                </h2>
+                
+                <div id="systemInfo">
+                    <div class="loading-gif">
+                        <img src="https://i.ibb.co/fY6QZhj1/herta-kuru3.gif" alt="載入中...">
+                        <p>載入中...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 使用者點餐頁面 -->
+    <div class="page-container" id="mealPage">
+        <div class="card">
+            <h2 class="card-title">
+                <i class="fas fa-utensils"></i> 點餐系統
+            </h2>
+            
+            <!-- 學號輸入區 -->
+            <div class="form-group">
+                <label class="form-label">學號</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="mealUserId" class="form-control" 
+                          placeholder="請輸入學號" maxlength="6" style="flex: 1;">
+                    <button class="btn btn-primary" onclick="loadUserMealInfo();sendDataToGitHub('event', 'click')" style="width: auto; padding: 14px 20px;">
+                        <i class="fas fa-sync-alt"></i> 載入
+                    </button>
+                </div>
+            </div>
+
+            <!-- 密碼輸入區塊（預設隱藏） -->
+            <div id="passwordSection" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">密碼</label>
+                    <input type="password" id="mealPassword" class="form-control" 
+                          placeholder="請輸入密碼" maxlength="50">
+                    <span class="form-text">請輸入您的個人密碼</span>
+                </div>
+            </div>
+            
+            <!-- 使用者資訊 -->
+            <div id="mealUserInfo" style="display: none;">
+                <div class="balance-display" style="margin-top: 10px;">
+                    <div id="mealUserName" style="font-size: 1.2rem;"></div>
+                    <div class="balance-amount" id="mealUserBalance">$0.0</div>
+                    <div>目前餘額</div>
+                </div>
+                
+                <!-- 今日已點餐點摘要 -->
+                <div id="mealUserOrderSummary" class="message info" style="margin-top: 15px; display: none;">
+                    <i class="fas fa-shopping-basket"></i>
+                    已點 <span id="orderedItemsCount">0</span> 項餐點
+                </div>
+            </div>
+        </div>
+
+        <!-- 今日餐點排行區塊（新增） -->
+        <div class="card" id="mealRankingSection" style="display: none;">
+            <h2 class="card-title">
+                <i class="fas fa-trophy"></i> 今日餐點排行
+                <span class="badge badge-info" style="margin-left: 10px;">熱門推薦</span>
+            </h2>
+            
+            <div id="mealRankingContent">
+                <div class="loading-gif">
+                    <img src="https://i.ibb.co/B2HbB9ND/herta-kuru1.gif" alt="載入中...">
+                    <p>載入排行中...</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 今日餐廳區塊 (有今日餐廳時顯示) -->
+        <div class="card" id="todayRestaurantMealSection" style="display: none;">
+            <h2 class="card-title">
+                <i class="fas fa-store-alt"></i> 今日特選餐廳
+            </h2>
+            
+            <div id="todayRestaurantName" class="message success" style="margin-bottom: 16px;">
+                載入中...
+            </div>
+
+            <!-- 餐廳附註區塊 -->
+            <div id="restaurantNoteContainer" class="message info" style="margin-bottom: 16px; display: none;text-align: center;">
+                <i class="fas fa-info-circle"></i>
+                <strong>餐廳附註：</strong>
+                <span id="restaurantNoteContent"></span>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">選擇分類</label>
+                <select id="restaurantCategorySelect" class="form-control" onchange="loadRestaurantItems()">
+                    <option value="">請選擇分類</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">選擇餐點</label>
+                <select id="restaurantItemSelect" class="form-control">
+                    <option value="">請先選擇分類</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-success" onclick="addRestaurantMeal();sendDataToGitHub('event', 'click')" style="flex: 1;">
+                    <i class="fas fa-plus-circle"></i> 加入餐點
+                </button>
+            </div>
+        </div>
+        
+        <!-- 美食廣場區塊 - 修改版 -->
+        <div class="card" id="foodCourtMealSection">
+            <h2 class="card-title">
+                <i class="fas fa-utensil-spoon"></i> 美食廣場
+            </h2>
+            
+            <!-- 分類選擇 -->
+            <div class="form-group">
+                <label class="form-label">選擇分類</label>
+                <select id="foodCourtCategorySelect" class="form-control" onchange="loadFoodCourtOptions()">
+                    <option value="">請選擇分類</option>
+                    <option value="便當系列">便當系列(飯哥不想接單)</option>
+                    <option value="鍋燒系列">鍋燒系列(飯哥不想接單)</option>
+                    <option value="麵食系列">麵食系列(飯哥不想接單)</option>
+                    <option value="焗烤系列">焗烤系列(啪！沒了！)</option>
+                    <option value="水餃/炒飯">水餃/炒飯(飯哥不想接單)</option>
+                </select>
+            </div>
+            
+            <!-- 動態選項容器 -->
+            <div id="foodCourtDynamicOptions" style="display: none;">
+                <!-- 便當系列：只有品項選擇 -->
+                <div id="mealOption1" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">品項</label>
+                        <select id="mealItemSelect" class="form-control">
+                            <option value="">請選擇品項</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- 鍋燒系列：品項 + 麵種 -->
+                <div id="mealOption2" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">品項</label>
+                        <select id="noodleItemSelect" class="form-control">
+                            <option value="">請選擇品項</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">麵種</label>
+                        <select id="noodleTypeSelect" class="form-control">
+                            <option value="">請選擇麵種</option>
+                            <option value="意麵">意麵</option>
+                            <option value="烏龍麵">烏龍麵</option>
+                            <option value="泡麵">泡麵</option>
+                            <option value="泡飯">泡飯</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="noodleExtraNoodle"> 加麵 (+10元)
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- 麵食系列：品項 + 麵種 + 加料選項 -->
+                <div id="mealOption3" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">品項</label>
+                        <select id="noodleDishItemSelect" class="form-control">
+                            <option value="">請選擇品項</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">麵種</label>
+                        <select id="noodleDishTypeSelect" class="form-control">
+                            <option value="">請選擇麵種</option>
+                            <option value="油麵">油麵</option>
+                            <option value="鐵板麵">鐵板麵</option>
+                            <option value="泡麵">泡麵</option>
+                            <option value="蒸煮麵">蒸煮麵</option>
+                            <option value="烏龍麵">烏龍麵</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="noodleDishExtraNoodle"> 加麵 (+10元)
+                        </label>
+                        <label style="margin-left: 15px;">
+                            <input type="checkbox" id="noodleDishExtraSoy"> 加沙茶醬 (+5元)
+                        </label>
+                        <label style="margin-left: 15px;">
+                            <input type="checkbox" id="noodleDishExtraSpicy"> 加麻辣醬 (+5元)
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- 焗烤系列：品項 + 肉 + 醬 + 加料選項 -->
+                <div id="mealOption4" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">品項</label>
+                        <select id="bakeItemSelect" class="form-control">
+                            <option value="">請選擇品項</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">肉類</label>
+                        <select id="bakeMeatSelect" class="form-control">
+                            <option value="">請選擇肉類</option>
+                            <option value="香腸">香腸</option>
+                            <option value="燻雞">燻雞</option>
+                            <option value="雞肉">雞肉</option>
+                            <option value="豬肉">豬肉</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">醬料</label>
+                        <select id="bakeSauceSelect" class="form-control">
+                            <option value="">請選擇醬料</option>
+                            <option value="白醬">白醬</option>
+                            <option value="青醬">青醬</option>
+                            <option value="紅醬">紅醬</option>
+                            <option value="黑胡椒醬">黑胡椒醬</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="bakeExtraSize"> 加大 (+15元)
+                        </label>
+                        <label style="margin-left: 15px;">
+                            <input type="checkbox" id="bakeExtraCheese"> 加起司 (+10元)
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- 水餃/炒飯：只有品項選擇 -->
+                <div id="mealOption5" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">品項</label>
+                        <select id="riceItemSelect" class="form-control">
+                            <option value="">請選擇品項</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button class="btn btn-success" onclick="addFoodCourtMeal();sendDataToGitHub('event', 'click')" style="width: 100%; margin-top: 15px;">
+                    <i class="fas fa-plus-circle"></i> 加入餐點
+                </button>
+            </div>
+            
+            <!-- 餐點預覽 -->
+            <div id="foodCourtMealPreview" style="margin-top: 15px; display: none;" class="message info">
+                <i class="fas fa-info-circle"></i>
+                當前選擇：<span id="mealPreviewText"></span>
+                <br>
+                價格：<span id="mealPreviewPrice">0</span>元
+            </div>
+        </div>
+        
+        <!-- 今日已點餐點 -->
+        <div class="card">
+            <h2 class="card-title">
+                <i class="fas fa-clipboard-list"></i> 今日暫存餐點
+                <span id="userMealsCount" class="badge badge-primary" style="margin-left: 10px;">0</span>
+            </h2>
+            
+            <div id="userTodayMeals">
+                <div class="message info">
+                    <i class="fas fa-info-circle"></i>
+                    請先輸入學號並載入
+                </div>
+            </div>
+            
+            <!-- 點餐總計 -->
+            <div id="userMealsTotal" style="margin-top: 16px; padding-top: 16px; border-top: 2px dashed var(--light); display: none;">
+                <div class="list-item">
+                    <span><i class="fas fa-calculator"></i> 總計金額</span>
+                    <strong id="totalMealsAmount" style="font-size: 1.2rem;">$0.0</strong>
+                </div>
+                <div class="message warning" style="margin-top: 10px; font-size: 0.9rem;">
+                    <i class="fas fa-info-circle"></i>
+                    點餐僅為暫存，截止訂餐後才會統一扣款
+                </div>
+            </div>
+        </div>
+        <!-- 在使用者點餐頁面最後面添加 -->
+        <div class="card" id="userOrderHistorySection" style="display: none;">
+            <h2 class="card-title">
+                <i class="fas fa-history"></i> 歷史訂單紀錄
+                <span id="orderHistoryBadge" class="badge badge-info" style="margin-left: 10px;">已截止</span>
+            </h2>
+            
+            <div id="userOrderHistory">
+                <div class="message info">
+                    <i class="fas fa-info-circle"></i>
+                    今日訂餐尚未截止
+                </div>
+            </div>
+        </div>
+        <!-- 新增：查看最新總訂單按鈕 -->
+        <div style="margin-top: 16px; text-align: center;">
+            <button class="btn btn-info" onclick="viewTodayTotalOrder();sendDataToGitHub('event', 'click')" style="width: auto; padding: 10px 20px;">
+                <i class="fas fa-receipt"></i> 查看最新總訂單
+            </button>
+        </div>
+    </div>
+
+    <!-- 在現有的頁面容器之後添加管理員頁面 -->
+
+    <!-- 管理員儲值頁面 -->
+    <div class="page-container admin-page" id="adminRechargePage">
+        <div class="card">
+            <h2 class="card-title">
+                <i class="fas fa-money-bill-wave"></i> 管理員儲值
+            </h2>
+            
+            <!-- 模式切換按鈕 -->
+            <div class="mode-switch" style="margin-bottom: 20px;">
+                <button class="btn btn-secondary admin-recharge-mode-btn active" data-mode="single">
+                    單人儲值
+                </button>
+                <button class="btn btn-secondary admin-recharge-mode-btn" data-mode="multiple">
+                    多人儲值
+                </button>
+                <button class="btn btn-secondary admin-recharge-mode-btn" data-mode="code">
+                    產生兌換碼
+                </button>
+            </div>
+            
+            <!-- 單人儲值表單 -->
+            <div id="adminRechargeSingleSection">
+                <form id="adminRechargeForm">
+                    <div class="form-group">
+                        <label class="form-label">學號</label>
+                        <input type="text" id="adminRechargeUserId" class="form-control" 
+                              placeholder="請輸入學號" maxlength="6" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">金額</label>
+                        <input type="number" id="adminRechargeAmount" class="form-control" 
+                              placeholder="請輸入金額" min="1" step="0.1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">備註（選填）</label>
+                        <input type="text" id="adminRechargeNote" class="form-control" 
+                              placeholder="輸入備註">
+                    </div>
+                    
+                    <button type="button" class="btn btn-success" onclick="processAdminRecharge();sendDataToGitHub('event', 'click')">
+                        <i class="fas fa-check"></i> 確認儲值
+                    </button>
+                </form>
+            </div>
+            
+            <!-- 多人儲值表單 -->
+            <div id="adminRechargeMultipleSection" style="display: none;">
+                <form id="adminRechargeMultipleForm">
+                    <div class="form-group">
+                        <label class="form-label">學號列表</label>
+                        <textarea id="adminRechargeUserIds" class="form-control" rows="4"
+                                  placeholder="請輸入學號，可用空格或逗號分隔
+    例如: 210001 210002 210003" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">金額</label>
+                        <input type="number" id="adminRechargeAmountMultiple" class="form-control" 
+                              placeholder="請輸入金額" min="1" step="0.1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">備註（選填）</label>
+                        <input type="text" id="adminRechargeNoteMultiple" class="form-control" 
+                              placeholder="輸入備註">
+                    </div>
+                    
+                    <button type="button" class="btn btn-success" onclick="processAdminMultipleRecharge();sendDataToGitHub('event', 'click')">
+                        <i class="fas fa-users"></i> 批量儲值
+                    </button>
+                </form>
+            </div>
+            
+            <!-- 產生兌換碼表單 -->
+            <div id="adminRechargeCodeSection" style="display: none;">
+                <form id="adminRechargeCodeForm">
+                    <div class="form-group">
+                        <label class="form-label">金額</label>
+                        <input type="number" id="adminCodeAmount" class="form-control" 
+                              placeholder="請輸入金額" min="1" step="0.1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">備註（選填）</label>
+                        <input type="text" id="adminCodeNote" class="form-control" 
+                              placeholder="輸入備註">
+                    </div>
+                    
+                    <button type="button" class="btn btn-warning" onclick="generateCode();sendDataToGitHub('event', 'click')">
+                        <i class="fas fa-ticket-alt"></i> 產生兌換碼
+                    </button>
+                </form>
+                
+                <div id="codeResult" class="message info" style="margin-top: 16px; display: none;">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>兌換碼：</strong>
+                    <span id="generatedCode"></span>
+                    <br>
+                    <button class="btn btn-secondary" onclick="copyCodeToClipboard();sendDataToGitHub('event', 'click')" style="margin-top: 10px;">
+                        <i class="fas fa-copy"></i> 複製兌換碼
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="adminRechargeResult"></div>
+    </div>
+
+    <!-- 管理員支出頁面 -->
+    <div class="page-container admin-page" id="adminExpensePage">
+        <div class="card">
+            <h2 class="card-title">
+                <i class="fas fa-shopping-cart"></i> 管理員支出
+            </h2>
+            
+            <p class="form-text" style="margin-bottom: 16px;">此頁面用於特殊情況手動支出，一般支出由點餐系統自動完成。</p>
+            
+            <!-- 模式切換按鈕 -->
+            <div class="mode-switch" style="margin-bottom: 20px;">
+                <button class="btn btn-secondary admin-expense-mode-btn active" data-mode="single">
+                    單人支出
+                </button>
+                <button class="btn btn-secondary admin-expense-mode-btn" data-mode="multiple">
+                    多人支出
+                </button>
+            </div>
+            
+            <!-- 單人支出表單 -->
+            <div id="adminExpenseSingleSection">
+                <form id="adminExpenseForm">
+                    <div class="form-group">
+                        <label class="form-label">學號</label>
+                        <input type="text" id="adminExpenseUserId" class="form-control" 
+                              placeholder="請輸入學號" maxlength="6" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">店家名稱</label>
+                        <input type="text" id="adminExpenseStore" class="form-control" 
+                              placeholder="輸入店家名稱" required list="storeList">
+                        <datalist id="storeList"></datalist>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">品項（選填）</label>
+                        <input type="text" id="adminExpenseItem" class="form-control" 
+                              placeholder="輸入品項名稱">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">金額</label>
+                        <input type="number" id="adminExpenseAmount" class="form-control" 
+                              placeholder="請輸入金額" min="1" step="0.1" required>
+                    </div>
+                    
+                    <button type="button" class="btn btn-danger" onclick="processAdminExpense();sendDataToGitHub('event', 'click')">
+                        <i class="fas fa-check"></i> 確認支出
+                    </button>
+                </form>
+            </div>
+            
+            <!-- 多人支出表單 -->
+            <div id="adminExpenseMultipleSection" style="display: none;">
+                <form id="adminExpenseMultipleForm">
+                    <div class="form-group">
+                        <label class="form-label">學號列表</label>
+                        <textarea id="adminExpenseUserIds" class="form-control" rows="4"
+                                  placeholder="請輸入學號，可用空格或逗號分隔" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">店家名稱</label>
+                        <input type="text" id="adminExpenseStoreMultiple" class="form-control" 
+                              placeholder="輸入店家名稱" required list="storeListMultiple">
+                        <datalist id="storeListMultiple"></datalist>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">品項（選填）</label>
+                        <input type="text" id="adminExpenseItemMultiple" class="form-control" 
+                              placeholder="輸入品項名稱">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">金額</label>
+                        <input type="number" id="adminExpenseAmountMultiple" class="form-control" 
+                              placeholder="請輸入金額" min="1" step="0.1" required>
+                    </div>
+                    
+                    <button type="button" class="btn btn-danger" onclick="processAdminMultipleExpense();sendDataToGitHub('event', 'click')">
+                        <i class="fas fa-users"></i> 批量支出
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div id="adminExpenseResult"></div>
+
+        <!-- 利息計算功能區塊 -->
+        <div class="card" style="margin-top: 20px;">
+            <h2 class="card-title">
+                <i class="fas fa-percent"></i> 利息計算
+            </h2>
+            
+            <div class="button-group">
+                <button class="btn btn-warning" onclick="calculateInterest();sendDataToGitHub('event', 'click')">
+                    <i class="fas fa-calculator"></i> 計算利息 (負餘額 × 1.33%)
+                </button>
+                <button class="btn btn-info" onclick="showInterestHistory();sendDataToGitHub('event', 'click')">
+                    <i class="fas fa-history"></i> 查看利息歷史
+                </button>
+            </div>
+            
+            <div id="interestResult" style="margin-top: 16px;"></div>
+        </div>
+    </div>
+
+    <!-- 管理員餐廳頁面 -->
+    <div class="page-container admin-page" id="adminRestaurantPage">
+        <div class="card">
+            <h2 class="card-title">
+                <i class="fas fa-store"></i> 今日餐廳管理
+            </h2>
+            
+            <!-- 今日餐廳狀態 -->
+            <div id="todayRestaurantStatus" class="message info" style="margin-bottom: 20px;">
+                <i class="fas fa-info-circle"></i>
+                <span id="todayRestaurantText">
+                    <div class="loading-gif">
+                        <img src="https://i.ibb.co/LdhqvgKS/herta-kuru2.gif" alt="載入中...">
+                        <p>載入中...</p>
+                    </div>
+                </span>
+            </div>
+
+            <!-- 暫存餐廳提示（新增） -->
+            <div id="tempRestaurantWarning" class="message warning" style="margin-bottom: 20px; display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>⚠️ 發現未處理的訂單資料</strong><br>
+                暫存餐廳：<span id="tempRestaurantName"></span><br>
+                請先前往 <strong>訂單頁面</strong> 點擊「清空所有餐廳餐點數量」按鈕後，再設定新的今日餐廳。<br>
+                <i style="color: var(--gray);">如果此情況是因不正常操作(例如截止訂餐時為空訂單)則要進入試算表手動清除System工作表內的<strong>temp_restaurant</strong>，或是聯絡系統開發者</i>
+            </div>
+            
+            <!-- 餐廳選擇區塊 (沒有今日餐廳時顯示) -->
+            <div id="restaurantSelectSection" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">選擇今日餐廳</label>
+                    <select id="restaurantSelect" class="form-control" onchange="loadRestaurantNoteForAdmin()">
+                        <option value="">請選擇餐廳</option>
+                    </select>
+                </div>
+
+                <!-- 新增：幫我選餐廳按鈕 -->
+                <button class="btn btn-warning" onclick="pickRandomRestaurantForAdmin();sendDataToGitHub('event', 'click')" style="margin-bottom: 8px;">
+                    <i class="fas fa-dice"></i> 🎲 幫我選餐廳
+                </button>
+
+                <!-- 餐廳附註顯示區塊 -->
+                <div id="adminRestaurantNoteContainer" class="message info" style="margin-bottom: 16px; display: none;">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>餐廳附註：</strong>
+                    <span id="adminRestaurantNoteContent"></span>
+                </div>
+                
+                <button class="btn btn-primary" onclick="setTodayRestaurant();sendDataToGitHub('event', 'click')">
+                    <i class="fas fa-check"></i> 確認設定今日餐廳
+                </button>
+            </div>
+            
+            <!-- 截止訂餐按鈕 (有今日餐廳時顯示) -->
+            <div id="restaurantCutoffSection" style="display: none;">
+                <div class="message warning" style="margin-bottom: 20px;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>注意：</strong>截止訂餐後系統將會：
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>計算所有使用者的餐點費用並自動扣款</li>
+                        <li>記錄今日餐點訂單明細</li>
+                        <li>清空今日餐廳設定</li>
+                        <li>清空所有使用者的今日餐點</li>
+                    </ul>
+                </div>
+                
+                <button class="btn btn-danger" onclick="confirmCutoffOrder();sendDataToGitHub('event', 'click')">
+                    <i class="fas fa-cut"></i> 截止訂餐並扣款
+                </button>
+            </div>
+        </div>
+        
+        <div id="restaurantResult"></div>
+
+        <!-- 通知發送卡片 -->
+        <div class="card">
+            <h2 class="card-title">
+                <i class="fas fa-bell"></i> 發送通知
+            </h2>
+            
+            <div class="form-group">
+                <label class="form-label">通知訊息</label>
+                <textarea id="notificationMessage" class="form-control" rows="4" 
+                          placeholder="請輸入要發送的通知訊息..."></textarea>
+                <span class="form-text">訊息將發送給所有已訂閱的使用者</span>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="sendNotification();sendDataToGitHub('event', 'click')">
+                    <i class="fas fa-paper-plane"></i> 發送通知
+                </button>
+                <button class="btn btn-secondary" onclick="clearNotificationInput();sendDataToGitHub('event', 'click')">
+                    <i class="fas fa-eraser"></i> 清空
+                </button>
+            </div>
+            
+            <div id="notificationResult" style="margin-top: 16px;"></div>
+        </div>
+    </div>
+
+    <!-- 管理員訂單頁面 - 修改版 -->
+    <div class="page-container admin-page" id="adminOrdersPage">
+        <div class="card">
+            <h2 class="card-title">
+                <i class="fas fa-clipboard-list"></i> 訂單明細
+            </h2>
+            
+            <!-- 模式切換按鈕 -->
+            <div class="mode-switch" style="margin-bottom: 20px;">
+                <button class="btn btn-secondary order-mode-btn active" data-mode="simple" onclick="switchOrderMode('simple');sendDataToGitHub('event', 'click')">
+                    <i class="fas fa-chart-bar"></i> 今日暫存訂單
+                </button>
+                <button class="btn btn-secondary order-mode-btn" data-mode="detailed" onclick="switchOrderMode('detailed');sendDataToGitHub('event', 'click')">
+                    <i class="fas fa-list-alt"></i> 歷史訂單紀錄
+                </button>
+            </div>
+            
+            <!-- 簡略模式專用：清空餐廳數量按鈕 -->
+            <div id="simpleModeActions" style="margin-bottom: 20px; display: block;">
+                <div class="message warning" style="margin-bottom: 10px;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>注意：</strong>訂完所有餐點後，請<mark>一定要</mark>點擊下方按鈕清空所有餐廳餐點數量。
+                </div>
+                <button class="btn btn-danger" onclick="confirmClearRestaurantCounts();sendDataToGitHub('event', 'click')" style="width: 100%;">
+                    <i class="fas fa-eraser"></i> 清空所有餐廳餐點數量
+                </button>
+            </div>
+            
+            <!-- 訂單容器 -->
+            <div id="ordersContainer">
+                <div class="loading-gif">
+                    <img src="https://i.ibb.co/fY6QZhj1/herta-kuru3.gif" alt="載入中...">
+                    <p>載入訂單中...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理員新增使用者頁面 -->
+    <div class="page-container admin-page" id="adminUsersPage">
+        <div class="card">
+            <h2 class="card-title">
+                <i class="fas fa-user-plus"></i> 新增學生
+            </h2>
+            
+            <form id="adminAddUserForm">
+                <div class="form-group">
+                    <label class="form-label">學號</label>
+                    <input type="text" id="adminNewUserId" class="form-control" 
+                          placeholder="請輸入6位數學號" maxlength="6" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">姓名</label>
+                    <input type="text" id="adminNewUserName" class="form-control" 
+                          placeholder="請輸入姓名" required>
+                </div>
+                
+                <button type="button" class="btn btn-primary" onclick="processAdminAddUser();sendDataToGitHub('event', 'click')">
+                    <i class="fas fa-plus"></i> 新增使用者
+                </button>
+            </form>
+        </div>
+        
+        <div id="adminAddUserResult"></div>
+
+        <!-- 更改學號區塊 - 確保 ID 是唯一的 -->
+        <div class="card" style="margin-top: 20px;">
+            <h2 class="card-title">
+                <i class="fas fa-edit"></i> 更改學號
+            </h2>
+            
+            <div class="message warning" style="margin-bottom: 16px;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>注意：</strong>此操作將會變更使用者在所有系統中的學號，包括交易紀錄和訂單歷史。
+            </div>
+            
+            <form id="changeUserIdForm">
+                <div class="form-group">
+                    <label class="form-label">原學號</label>
+                    <input type="text" id="changeOldUserId" class="form-control" 
+                          placeholder="請輸入原6位數學號" maxlength="6" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">新學號</label>
+                    <input type="text" id="changeNewUserId" class="form-control" 
+                          placeholder="請輸入新6位數學號" maxlength="6" required>
+                    <span class="form-text">新學號不能與現有學號重複</span>
+                </div>
+                
+                <button type="button" class="btn btn-warning" onclick="confirmChangeUserId();sendDataToGitHub('event', 'click')">
+                    <i class="fas fa-sync-alt"></i> 確認更改學號
+                </button>
+            </form>
+            
+            <div id="changeUserIdResult" style="margin-top: 16px;"></div>
+        </div>
+
+        <!-- 在管理員新增使用者頁面的更改學號區塊下方添加 -->
+        <div class="card" style="margin-top: 20px;">
+            <h2 class="card-title">
+                <i class="fas fa-key"></i> 設定使用者密碼
+            </h2>
+            
+            <form id="setUserPasswordForm">
+                <div class="form-group">
+                    <label class="form-label">學號</label>
+                    <input type="text" id="passwordUserId" class="form-control" 
+                          placeholder="請輸入學號" maxlength="6" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">密碼</label>
+                    <input type="text" id="userNewPassword" class="form-control" 
+                          placeholder="請輸入密碼（留空則清除密碼）" maxlength="20">
+                    <span class="form-text">可留空表示不設密碼</span>
+                </div>
+                
+                <button type="button" class="btn btn-warning" onclick="adminSetUserPassword();sendDataToGitHub('event', 'click')">
+                    <i class="fas fa-save"></i> 設定密碼
+                </button>
+            </form>
+            
+            <div id="setPasswordResult" style="margin-top: 16px;"></div>
+        </div>
+    </div>
+
+    <!-- 底部導航 -->
+    <nav class="bottom-nav">
+        <!-- 一般使用者頁面 (5個) -->
+        <div class="nav-items" id="userNavItems">
+            <a href="#" class="nav-item active" data-page="balance" onclick="return handleUserNavClick('balance')">
+                <i class="fas fa-search-dollar nav-icon"></i>
+                <span>查詢</span>
+            </a>
+            <a href="#" class="nav-item" data-page="analytics" onclick="return handleUserNavClick('analytics')">
+                <i class="fas fa-chart-bar nav-icon"></i>
+                <span>統計</span>
+            </a>
+            <a href="#" class="nav-item" data-page="recharge" onclick="return handleUserNavClick('recharge')">
+                <i class="fas fa-gift nav-icon"></i>
+                <span>儲值</span>
+            </a>
+            <a href="#" class="nav-item" data-page="meal" onclick="return handleUserNavClick('meal')">
+                <i class="fas fa-utensils nav-icon"></i>
+                <span>點餐</span>
+            </a>
+            <a href="#" class="nav-item" data-page="system" onclick="return handleUserNavClick('system')">
+                <i class="fas fa-info-circle nav-icon"></i>
+                <span>資訊</span>
+            </a>
+        </div>
+        
+        <!-- 管理員頁面 (5個) -->
+        <div class="nav-items" id="adminNavItems">
+            <a href="#" class="nav-item" data-page="adminRecharge" onclick="return handleAdminNavClick('adminRecharge')">
+                <i class="fas fa-money-bill-wave nav-icon"></i>
+                <span>儲值</span>
+            </a>
+            <a href="#" class="nav-item" data-page="adminExpense" onclick="return handleAdminNavClick('adminExpense')">
+                <i class="fas fa-shopping-cart nav-icon"></i>
+                <span>支出</span>
+            </a>
+            <a href="#" class="nav-item" data-page="adminRestaurant" onclick="return handleAdminNavClick('adminRestaurant')">
+                <i class="fas fa-store nav-icon"></i>
+                <span>餐廳</span>
+            </a>
+            <a href="#" class="nav-item" data-page="adminOrders" onclick="return handleAdminNavClick('adminOrders')">
+                <i class="fas fa-clipboard-list nav-icon"></i>
+                <span>訂單</span>
+            </a>
+            <a href="#" class="nav-item" data-page="adminUsers" onclick="return handleAdminNavClick('adminUsers')">
+                <i class="fas fa-user-plus nav-icon"></i>
+                <span>新增</span>
+            </a>
+        </div>
+        
+        <!-- 管理切換按鈕 -->
+        <a href="#" class="nav-item admin-toggle" id="adminToggle" data-mode="off" onclick="return toggleAdminMode()">
+            <i class="fas fa-user-shield nav-icon"></i>
+            <span>管理</span>
+        </a>
+    </nav>
+
+    <!-- 管理員登入模態視窗 -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-lock"></i> 管理員登入</h3>
+                <button class="close-btn" onclick="hideAdminModal();sendDataToGitHub('event', 'click')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">管理員密碼</label>
+                    <input type="password" id="adminPassword" class="form-control" 
+                           placeholder="請輸入密碼" required>
+                </div>
+                <div id="loginMessage"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideAdminModal();sendDataToGitHub('event', 'click')">取消</button>
+                <button class="btn btn-primary" onclick="login();sendDataToGitHub('event', 'click')">
+                    <i class="fas fa-sign-in-alt"></i> 登入
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知模態視窗 -->
+    <div id="notifyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-bell"></i> 通知</h3>
+                <button class="close-btn" onclick="hideNotifyModal();sendDataToGitHub('event', 'click')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="notifyContent"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="hideNotifyModal();sendDataToGitHub('event', 'click')">關閉</button>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- 頁腳 -->
+    <footer class="footer">
+        <details class="coloregg-summary">
+          <summary>大家政便當廠-儲值點餐系統 &copy; 2026版權所有</summary>
+          我剛剛埋彩蛋的時候，你偷看了罷(惱)
+        </details>
+        <p>使用 Google Apps Script 開發 · DeepSeek 輔助</p>
+        <p>連結 GA4 · GTM · GSC · GCP 全方位Google生態</p>
+        <p>僅供大家政便當廠及其子企業使用</p>
+        <p>本站網址：https://bhgdelicious.pse.is/balance-order-system_github</p>
+        <p><a href="https://www.instagram.com/bhg.delicious/" target="_blank">IG 官方帳號</a> · <a href="https://forms.gle/ykBRpR5ydjRSwcXb6" target="_blank">問題回報&許願池</a></p>
+
+        <!-- 新增：更新摘要按鈕 -->
+        <p>
+            <button onclick="showUpdateSummary();sendDataToGitHub('event', 'click')" style="
+                background: none;
+                border: none;
+                color: var(--gray);
+                cursor: pointer;
+                font-size: 0.8rem;
+                text-decoration: underline;
+                padding: 5px 10px;
+                margin-top: 10px;
+            ">
+                <i class="fas fa-info-circle"></i> 查看更新摘要
+            </button>
+        </p>
+
+        <!--此為計數器，計數器的圖像已被設定的鏈接站點，不要執行代碼的任何修改。-->
+        <div class="modern-center">
+        <div class="counter-label">本系統訪問次數</div>
+              <nobr>
+                <table border="0" cellspacing="0" cellpadding="0">
+                  <tbody><tr>
+                  <td>
+                    <a href="https://www.stylemap.co.jp/counter/taiwan/">
+                      <img src="https://www.f-counter.net/ani1/66/1768817489/" alt="網站計數器" border="0" style="margin:0px; padding:0px; border:0px; vertical-align:bottom">
+                    </a>
+                  </td>
+                  <td>
+                    <a href="https://www.stylemap.co.jp/counter/taiwan/">
+                      <img src="https://www.f-counter.net/ani2/66/1768817489/" alt="網站計數器" border="0" style="margin:0px; padding:0px; border:0px; vertical-align:bottom">
+                    </a>
+                  </td>
+                  </tr></tbody>
+                </table>
+              </nobr>
+              <div class="counter-label" style="font-size:12px;">
+                計數器技術來源: stylemap.co.jp
+              </div>
+            </div>
+        </div>
+        <br><br>
+    </footer>
+  </body>
+  </html>
+    "></iframe>
 
   
   <iframe id="gasFramePush" src="" height="0" width="0" style="display:none;visibility:hidden"></iframe>
