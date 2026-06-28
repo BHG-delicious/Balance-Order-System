@@ -303,7 +303,6 @@
   </html>
     "></iframe>
 
-  
   <iframe id="gasFramePush" src="" height="0" width="0" style="display:none;visibility:hidden"></iframe>
   <iframe id="gasFramePWA" src="" height="0" width="0" style="display:none;visibility:hidden"></iframe>
 
@@ -316,7 +315,7 @@
 
   <script>
     const gasFrame = document.getElementById("gasFrame");
-    gasFrame.srcdoc = "";
+    gasFrame.removeAttribute('srcdoc');
     gasFrame.src = targetUrl.toString();
 
     window.addEventListener('appinstalled', (evt) => {
