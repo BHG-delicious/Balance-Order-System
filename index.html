@@ -168,11 +168,8 @@
             <a class="warning-link" href="https://support.google.com/adsense/answer/12654?hl=zh-Hant" target="_blank">
               瞭解詳情
             </a>
-            <a class="warning-link" href="chrome://settings/content/siteDetails?site=https%3A%2F%2Fbhg-delicious.github.io" target="_blank">
+            <a class="warning-link" id="warning-link" target="_blank">
               前往網站設定(僅限Chrome)
-            </a>
-            <a class="warning-link" href="javascript:alert('chrome://settings/content/siteDetails?site=https%3A%2F%2Fbhg-delicious.github.io');">
-              前往網站設定2(僅限Chrome)
             </a>
           </div>
         </div>
@@ -184,6 +181,12 @@
       </div>
     </td></tr></tbody></table>
     <iframe allow="clipboard-read; clipboard-write" src="https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec?utm_source=noscript&utm_medium=github&utm_campaign=balance-order-system"></iframe>
+    <script>
+      document.getElementById('warning-link').addEventListener('click', function(event) {
+        event.preventDefault(); // 阻止 <a> 預設的跳轉或錨點行為
+        alert('請前往chrome://settings/content/siteDetails?site=https%3A%2F%2Fbhg-delicious.github.io');
+      });
+    </script>
   </noscript>
 
   <!-- 修正點 1：替 iframe 加上 id="gasFrame"，否則下方的 postMessage 會找不到目標而報錯 -->
