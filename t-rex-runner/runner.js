@@ -790,7 +790,7 @@
                 }, '*');
             } else {
                 const input = prompt('請輸入您的學號（6位數字），或留空以 Guest 身份遊玩（不符合格式的輸入也會被視為Guest）：', '');
-                console.log(input)
+                console.log(input);
                 if (input === null) {
                   const userName = 'Guest';
                 } else if (input.trim() === '') {
@@ -800,10 +800,11 @@
                 } else {
                   const userName = input.trim();
                 }
+                console.log(userName);
 
                 const baseGasUrl = "https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec";
                 const gasFrame = document.getElementById("gasFramePush");
-                if (!gasFrame) return;
+                if (!gasFrame) console.log("no gasFrame");
                 gasFrame.src = baseGasUrl + "?dinoName=" + userName + "&dinoScore=" + currentScore;
             }    
             // ========== 添加的代码结束 ==========
