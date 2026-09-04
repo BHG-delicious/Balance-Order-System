@@ -1,13 +1,33 @@
-<!doctype html>
-<html>
-
+<!DOCTYPE html>
+<html lang="zh-TW">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no">
-    <title >chrome easter egg: t-rex runner</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="keywords" content="小恐龍, Chrome, Easter Egg, T-Rex Runner, Dino, Chrome Dino, GitHub, GitHub Pages">
+    <meta name="description" content="隸屬於「大家政便當廠-儲值點餐系統」的小恐龍遊戲">
+    <meta name="author" content="gtes10301">
+    
+    <title >Chrome Dino from 大家政便當廠-儲值點餐系統</title>
     <link rel="stylesheet" href="runner.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet"> 
     <script src="runner.js"></script>
+
+    <link rel="icon" type="image/png" href="https://i.ibb.co/ZybSdZr/dino.gif">
+    <link rel="shortcut icon" type="image/png" href="https://i.ibb.co/ZybSdZr/dino.gif">
+    <base target="_top">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/ZybSdZr/dino.gif">
+    <link rel="apple-touch-icon-precomposed" href="https://i.ibb.co/ZybSdZr/dino.gif">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+    <link rel="canonical" href="https://bhg-delicious.github.io/Balance-Order-System/t-rex-runner/runner.html?utm_source=canonical">
+
+    <meta property="og:title" content="Chrome Dino from 大家政便當廠-儲值點餐系統">
+    <meta property="og:description" content="隸屬於「大家政便當廠-儲值點餐系統」的小恐龍遊戲">
+    <meta property="og:image" content="https://i.ibb.co/ZybSdZr/dino.gif">
+    <meta property="og:url" content="https://bhg-delicious.github.io/Balance-Order-System/t-rex-runner/runner.html?utm_source=og">
+    <meta property="og:site_name" content="BHG-delicious_Chrome Dino">
+    <meta property="og:type" content="website">
 </head>
 
 <body id="t" class="offline">
@@ -32,13 +52,8 @@
 </body>
 
 <script>
-    document.onkeydown = function(evt) {
-    evt = evt || window.event;
-    if (evt.keyCode == 32) {
-        var box = document.getElementById("messageBox");
-        box.style.visibility="hidden";
-    }
-};
+    var box = document.getElementById("messageBox");
+    box.style.visibility="hidden";
 </script>
     
 </html>
