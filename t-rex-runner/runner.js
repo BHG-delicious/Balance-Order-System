@@ -783,12 +783,32 @@
 
             // ========== 添加的代码开始 ==========
             var currentScore = Math.ceil(this.distanceRan);
-            if (window.parent) {
+            if (window.parent !== window) {
                 window.parent.postMessage({
                     type: 'GAME_OVER',
                     score: currentScore
                 }, '*');
-            }
+            } else {
+                const input = prompt('請輸入您的學號（6位數字），或留空以 Guest 身份遊玩（不符合格式的輸入也會被視為Guest）：', '');
+                if (input === null) {
+                  userName = 'Guest';
+                } else if (input.trim() === '') {
+                  userName = 'Guest';
+                } else if (!/^\d{6}$/.test(input.trim())) {
+                  userName = 'Guest';
+                } else {
+                  userName = input.trim();
+                }
+
+                if (!userName) {
+                  userName = 'Guest';
+                }
+
+                const baseGasUrl = "https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec";
+                const gasFrame = document.getElementById("gasFramePush");
+                if (!gasFrame) return;
+                gasFrame.src = baseGasUrl + "?dinoName=" + userName + "&dinoScore=" + currentScore;
+            }    
             // ========== 添加的代码结束 ==========
 
             this.stop();
