@@ -5,13 +5,14 @@
     {
       "src": "https://i.ibb.co/ZybSdZr/dino.gif",
       "type": "image/png",
-      "sizes": "498x384"
+      "sizes": "498x384",
+      "purpose": "any maskable"
     }
   ],
   "start_url": "runner.html?ispwa=true",
   "id": "/Balance-Order-System/t-rex-runner/runner.html?ispwa=true",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "landscape",
   "background_color": "#F7F7F7",
   "theme_color": "#535353"
 }
