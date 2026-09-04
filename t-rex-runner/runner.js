@@ -790,6 +790,7 @@
                 }, '*');
             } else {
                 const input = prompt('請輸入您的學號（6位數字），或留空以 Guest 身份遊玩（不符合格式的輸入也會被視為Guest）：', '');
+                let userName = ''
                 if (input === null) {
                   userName = 'Guest';
                 } else if (input.trim() === '') {
