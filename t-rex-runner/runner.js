@@ -792,13 +792,13 @@
                 const input = prompt('請輸入您的學號（6位數字），或留空以 Guest 身份遊玩（不符合格式的輸入也會被視為Guest）：', '');
                 console.log(input);
                 if (input === null) {
-                  const userName = 'Guest';
+                  var userName = 'Guest';
                 } else if (input.trim() === '') {
-                  const userName = 'Guest';
+                  var userName = 'Guest';
                 } else if (!/^\d{6}$/.test(input.trim())) {
-                  const userName = 'Guest';
+                  var userName = 'Guest';
                 } else {
-                  const userName = input.trim();
+                  var userName = input.trim();
                 }
                 console.log(userName);
 
