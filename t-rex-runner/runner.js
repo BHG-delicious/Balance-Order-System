@@ -783,22 +783,18 @@
 
             // ========== 添加的代码开始 ==========
             var currentScore = Math.ceil(this.distanceRan);
+            var userName = localStorage.getItem("username") || 'Guest';
             if (window.parent !== window) {
                 window.parent.postMessage({
                     type: 'GAME_OVER',
                     score: currentScore
                 }, '*');
             } else {
-                const input = prompt('請輸入您的學號（6位數字），或留空以 Guest 身份遊玩（不符合格式的輸入也會被視為Guest）：', '');
+                const input = prompt(`請輸入您的學號（6位數字），或留空以預設值 ${userName} 身份遊玩（不符合格式的輸入也會被設為預設值）：`, '');
                 console.log(input);
-                if (input === null) {
-                  var userName = 'Guest';
-                } else if (input.trim() === '') {
-                  var userName = 'Guest';
-                } else if (!/^\d{6}$/.test(input.trim())) {
-                  var userName = 'Guest';
-                } else {
-                  var userName = input.trim();
+                if (!(input === null || input.trim() === '' || !/^\d{6}$/.test(input.trim()))) {
+                    userName = input.trim();
+                    localStorage.setItem("username", userName);
                 }
                 console.log(userName);
 
