@@ -19,6 +19,7 @@
   "orientation": "portrait",
   "background_color": "#ff6060",
   "theme_color": "#2c3e50",
+  "display_override": ["window-controls-overlay"],
   "screenshots": [
     {
       "src": "https://i.ibb.co/dwv8kNNW/screenshots-1.jpg",
