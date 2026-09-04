@@ -790,19 +790,15 @@
                 }, '*');
             } else {
                 const input = prompt('請輸入您的學號（6位數字），或留空以 Guest 身份遊玩（不符合格式的輸入也會被視為Guest）：', '');
-                let userName = ''
+                console.log(input)
                 if (input === null) {
-                  userName = 'Guest';
+                  const userName = 'Guest';
                 } else if (input.trim() === '') {
-                  userName = 'Guest';
+                  const userName = 'Guest';
                 } else if (!/^\d{6}$/.test(input.trim())) {
-                  userName = 'Guest';
+                  const userName = 'Guest';
                 } else {
-                  userName = input.trim();
-                }
-
-                if (!userName) {
-                  userName = 'Guest';
+                  const userName = input.trim();
                 }
 
                 const baseGasUrl = "https://script.google.com/macros/s/AKfycby8avMBWXM4N6XRRFcj2cgWffaRv7ReCc_4IrjrrQ1_OqjEMHxPYqpfrB_asWGKnUFCOg/exec";
