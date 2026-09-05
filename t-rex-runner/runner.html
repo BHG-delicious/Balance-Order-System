@@ -55,5 +55,8 @@
 <script>
     var box = document.getElementById("messageBox");
     box.style.visibility="hidden";
+    if (screen.orientation && screen.orientation.unlock) {
+      screen.orientation.unlock(); // 恢復為系統預設或允許隨裝置旋轉
+    }
 </script>
 </html>
