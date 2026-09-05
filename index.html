@@ -137,6 +137,12 @@
     });
     targetUrl.searchParams.set('env', 'github');
     targetUrl.hash = window.location.hash;
+
+    if (screen.orientation && screen.orientation.lock) {
+      screen.orientation.lock('landscape')
+        .then(() => console.log('已成功鎖定為橫螢幕'))
+        .catch((error) => console.error('鎖定失敗：', error));
+    }
   </script>
   
   <style>
