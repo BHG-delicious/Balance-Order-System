@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html ⚡ lang="zh-TW">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -46,9 +46,6 @@
   <meta name="google-site-verification" content="STfcowb6CJ0DyNTcVMfEsVNjxrRAVv9TeYKViCCEHws">
   <meta http-equiv="Content-Security-Policy" content="">
   <meta http-equiv="Cross-Origin-Embedder-Policy" content="credentialless">
-  
-  <!-- 1. 只保留這一個 OneSignal SDK 載入腳本 -->
-  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
   <!-- 由 Google 結構化資料標記協助工具產生的 JSON-LD 標記。 -->
   <script type="application/ld+json">
@@ -200,8 +197,9 @@
     });
   </script>
 
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4906582502981364"
-       crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4906582502981364" crossorigin="anonymous"></script>
+  <script async src="https://ampproject.org"></script>
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
   <script>
     // GAS 的實際部署網址
@@ -224,11 +222,11 @@
     }
   </script>
   
-  <style>
+  <style amp-custom>
     html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #ffffff; }
     iframe { width: 100%; height: 100%; border: none; display: block; }
     notBeSeen {height: 0; width: 0; display: none; visibility: hidden}
-  </style>
+  </style amp-custom>
 </head>
 <body>
   <!-- Google Tag Manager (noscript) -->
