@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ⚡ lang="zh-TW">
+<html ⚡ lang="zh-TW" role="main">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -274,7 +274,7 @@
   </noscript>
 
   <!-- 修正點 1：替 iframe 加上 id="gasFrame"，否則下方的 postMessage 會找不到目標而報錯 -->
-  <iframe id="gasFrame" allow="clipboard-read; clipboard-write" src="" srcdoc="
+  <iframe id="gasFrame" title="gasFrame" allow="clipboard-read; clipboard-write" src="" srcdoc="
 <!DOCTYPE html>
 <html>
 <head>
@@ -394,8 +394,8 @@
   </html>
     "></iframe>
 
-  <iframe id="gasFramePush" src="" class="notBeSeen"></iframe>
-  <iframe id="gasFramePWA" src="" class="notBeSeen"></iframe>
+  <iframe id="gasFramePush" title="gasFramePush" src="" class="notBeSeen"></iframe>
+  <iframe id="gasFramePWA" title="gasFramePWA" src="" class="notBeSeen"></iframe>
 
   <div class="notBeSeen">
     title：大家政便當廠-儲值點餐系統<br>
