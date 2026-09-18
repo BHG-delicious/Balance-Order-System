@@ -1,0 +1,9 @@
+# 大家政便當廠-儲值點餐系統
+> 集眾多功能於一身的儲值點餐系統
+
+## 核心單元
+- [首頁](https://bhg-delicious.github.io/Balance-Order-System/)：網站的完整導覽與最新消息。
+- [關於我們](https://yoursite.comabout)：了解我們的品牌背景與核心服務。
+
+## 產品與文章
+- [熱門產品](https://yoursite.comproduct)：我們提供的核心解決方案。
