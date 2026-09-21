@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ⚡ lang="zh-TW" xml:lang="zh-TW" role="document">
+<html ⚡ lang="zh-TW" xml:lang="zh-TW" role="banner">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -293,7 +293,7 @@
   </noscript>
 
   <!-- 修正點 1：替 iframe 加上 id="gasFrame"，否則下方的 postMessage 會找不到目標而報錯 -->
-  <iframe id="gasFrame" title="gasFrame" allow="clipboard-read; clipboard-write" src="" srcdoc="
+  <iframe id="gasFrame" title="gasFrame" role="main" allow="clipboard-read; clipboard-write" src="" srcdoc="
 <!DOCTYPE html>
 <html>
 <head>
@@ -413,18 +413,42 @@
   </html>
     "></iframe>
 
-  <iframe id="gasFramePush" title="gasFramePush" src="" class="notBeSeen"></iframe>
-  <iframe id="gasFramePWA" title="gasFramePWA" src="" class="notBeSeen"></iframe>
+  <iframe id="gasFramePush" title="gasFramePush" role="tab" src="" class="notBeSeen"></iframe>
+  <iframe id="gasFramePWA" title="gasFramePWA" role="tab" src="" class="notBeSeen"></iframe>
 
-  <div class="notBeSeen">
+  <div class="notBeSeen" role="contentinfo">
     title：大家政便當廠-儲值點餐系統<br>
     description：集眾多功能於一身的儲值點餐系統<br>
     keywords：大家政, 便當廠, 大家政便當廠, 大家政便當廠資訊部, 儲值系統, 點餐系統, 儲值點餐系統, Google Apps Script, Apps Script, GAS, GitHub<br>
     author：gtes10301<br><br>
-    sitemap.xml：<a href="https://bhg-delicious.github.io/Balance-Order-System/sitemap.xml">https://bhg-delicious.github.io/Balance-Order-System/sitemap.xml</a><br>
-    sitemap.txt：<a href="https://bhg-delicious.github.io/Balance-Order-System/sitemap.txt">https://bhg-delicious.github.io/Balance-Order-System/sitemap.txt</a><br>
-    robots.txt：<a href="https://bhg-delicious.github.io/Balance-Order-System/robots.txt">https://bhg-delicious.github.io/Balance-Order-System/robots.txt</a><br>
-    <a href="https://bhg-delicious.github.io/Balance-Order-System/favicon.ico"><img href="https://i.ibb.co/1JJzGkTw/BHG-logo1.png"></img></a><br>
+    sitemap.xml：<a role="link" href="https://bhg-delicious.github.io/Balance-Order-System/sitemap.xml">https://bhg-delicious.github.io/Balance-Order-System/sitemap.xml</a><br>
+    sitemap.txt：<a role="link" href="https://bhg-delicious.github.io/Balance-Order-System/sitemap.txt">https://bhg-delicious.github.io/Balance-Order-System/sitemap.txt</a><br>
+    robots.txt：<a role="link" href="https://bhg-delicious.github.io/Balance-Order-System/robots.txt">https://bhg-delicious.github.io/Balance-Order-System/robots.txt</a><br>
+    <a role="link" title="BHG-logo" href="https://bhg-delicious.github.io/Balance-Order-System/favicon.ico"><img alt="BHG-logo" title="BHG-logo" src="https://i.ibb.co/1JJzGkTw/BHG-logo1.png"></img></a><br>
+
+    <a href="#main" title="skip-link" role="link">skip to main</a>
+    <header role="banner" title="header">
+      <div>This is the header.</div>
+    </header>
+    <nav role="navigation" title="nav">
+      <div>This is the navigation.</div>
+    </nav>
+    <main role="main" id="main" title="main" accesskey="m">
+      <div>This is the main content.</div>
+      <section role="region" title="section">
+        <div>This is a section.</div>
+      </section>
+      <article role="article" title="article">
+        <div>This is an article.</div>
+      </article>
+      <aside role="complementary" title="aside">
+        <div>This is an aside.</div>
+      </aside>
+      <button title="buttom" role="button">button</button>
+    </main>
+    <footer role="contentinfo" title="footer">
+      <div>This is the footer.</div>
+    </footer>
   </div>
 
   <script>
